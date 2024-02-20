@@ -153,11 +153,12 @@ function handleSpeechInput()    {
     backgroundColor =   words.pop();
 
     //Assigning an input depending on specific word/sentence:
-    if (speechRecognizer.resultString.toLowerCase === `Fuck`)   {
-        currentSpeech   =   `Language!`;
-    }   else if (speechRecognizer.resultString.toLowerCase === `Turn on the lights`)    {
+    if (speechRecognizer.resultString === `turn on the lights`)    {
         lights  =   true;
+    }   else if (speechRecognizer.resultString === `turn off the lights`)    {
+        lights  =   false;
     }
+    console.log(lights);
     //Applying the Recognized speech into a variable:
     currentSpeech   =   speechRecognizer.resultString;
 }

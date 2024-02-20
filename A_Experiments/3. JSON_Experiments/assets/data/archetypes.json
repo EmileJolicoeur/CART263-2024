@@ -1,0 +1,17 @@
+{
+    "Hero": {
+      "synonyms": ["protagonist"],
+      "qualities": ["brave","willing","determined"],
+      "nature": "good"
+    },
+    "Anti-hero": {
+      "synonyms": ["antagonist"],
+      "qualities": ["unwilling","reluctant"],
+      "nature": "neutral"
+    },
+    "Fool": {
+      "synonyms": ["joker","jester","idiot"],
+      "qualities": ["thoughtless","silly","amusing"],
+      "nature": "evil"
+    }
+  }

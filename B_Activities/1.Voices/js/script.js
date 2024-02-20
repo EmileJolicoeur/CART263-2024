@@ -46,7 +46,7 @@ const   lang    =   [
     // `en-US`,
     // `ja-JP`,
     // `es-ES`,
-]
+];
 
 const   commands    =   [
     // {
@@ -70,12 +70,12 @@ let interactionNb   =   0;
 
 
 let recognition =   new p5.SpeechRec();
-let voice   =   new p5.Speech(lang);
+let voice   =   new p5.Speech();
 
 
 /** */
 function preload()  {
-    voice.listVoices();
+    //voice.listVoices();
 }
 
 
