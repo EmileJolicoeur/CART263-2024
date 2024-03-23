@@ -1,0 +1,10 @@
+{
+    "description":  "List of Smart Home Devices",
+    "devices":  [
+        {
+            "Siri":         {"trigger": "Siri", "info": "undefined"},
+            "Alexa":        {"trigger": "Alexa", "info": "undefined"},
+            "Google Home":  {"trigger": "Hey Google!", "info": "undefined"}
+        }
+    ]
+}

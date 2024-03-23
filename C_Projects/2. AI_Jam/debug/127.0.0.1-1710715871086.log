@@ -1,0 +1,64 @@
+p5.speech.js:92 p5.Speech: voices loaded!
+script3.js:122 {Data_Loaded}
+script3.js:285 Nan -1
+script3.js:293 undefined
+script3.js:137 Setup: Completed 
+  > SmartDevice:     Alexa! 
+  > AI_Name:         A.I. 
+  > Fam.Member:      mother
+script3.js:339 User: 
+script3.js:383 User Input: hello
+script3.js:404 Positive:  1 0 
+Negative:  0 0 
+Info gathered:  {name: undefined, age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:285 Nan 0
+script3.js:293 Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:298 
+Placeholders: {1}, {2}. {3} 
+Values:  undefined A.I. mother (12) ['Oh!', 'Hello', 'there!,', "it's", 'been', 'a', 'while', 'since', "I've", 'heard', "someone's", 'voice...']
+script3.js:320 Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:278 (6) ['[X]', '[_]', '[_]', '[_]', '[_]', '[_]'] "What's your name, new friend?" '[0]'
+script3.js:339 User: hello submit input
+script3.js:383 User Input: john
+script3.js:404 Positive:  1 1 
+Negative:  1 0 
+Info gathered:  {name: undefined, age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:285 What's your name, new friend? 0
+script3.js:293 Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:298 
+Placeholders: {1}, {2}. {3} 
+Values:  undefined A.I. mother (12) ['Oh!', 'Hello', 'there!,', "it's", 'been', 'a', 'while', 'since', "I've", 'heard', "someone's", 'voice...']
+script3.js:320 Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:339 User: john submit input
+script3.js:383 User Input: my name is john
+script3.js:513 ['John']
+script3.js:404 Positive:  2 1 
+Negative:  1 1 
+Info gathered:  {name: 'John', age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:285 What's your name, new friend? 1
+script3.js:293 Nice to meet you {1}, my name is {2}. 
+ ... 
+ Forgive me, I have so many questions, I don't know what to ask...
+script3.js:298 
+Placeholders: {1}, {2}. {3} 
+Values:  John A.I. mother (25) ['Nice', 'to', 'meet', 'you', '{1},', 'my', 'name', 'is', '{2}.', '\n', '...', '\n', 'Forgive', 'me,', 'I', 'have', 'so', 'many', 'questions,', 'I', "don't", 'know', 'what', 'to', 'ask...']
+script3.js:320 Nice to meet you John, my name is "A.I.". 
+ ... 
+ Forgive me, I have so many questions, I don't know what to ask...
+script3.js:278 (6) ['[X]', '[X]', '[_]', '[_]', '[_]', '[_]'] 'Where are you from? What country?' '[1]'
+script3.js:339 User: my name is john submit input
+script3.js:383 User Input: i am from canada
+script3.js:438 canada
+script3.js:513 ['Canada']
+script3.js:513 (2) ['From', 'Canada']
+script3.js:404 Positive:  3 2 
+Negative:  1 1 
+Info gathered:  {name: 'John', age: undefined, nationality: 'Canada', address: undefined, relationship: undefined}
+script3.js:285 Where are you from? What country? 2
+script3.js:293 Wow, you sound pretty mature for your age
+script3.js:298 
+Placeholders: {1}, {2}. {3} 
+Values:  John A.I. mother (8) ['Wow,', 'you', 'sound', 'pretty', 'mature', 'for', 'your', 'age']
+script3.js:320 Wow, you sound pretty mature for your age
+script3.js:278 (6) ['[X]', '[X]', '[_]', '[X]', '[_]', '[_]'] 'are you in a relationship?' '[3]'
+script3.js:339 User: i am from canada submit input

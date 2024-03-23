@@ -1,0 +1,91 @@
+{
+    "descr":    "Data for AI:",
+    "data": {
+        "posInput":     0,
+        "posOutput":    0,
+        "negInput":     0,
+        "negOutput":    0,
+
+        "names":    [
+            {
+                "acronyms": [
+                    "A.I.",
+                    "DAMIEN",
+                    "BRIAN",
+                    "MARIA",
+                    "DIANA"
+                ]
+            },
+            {
+                "meanings": [
+                    "Artificial_Intelligence",
+                    "Data_Analysis_&_Mapping_for_Identity_Extraction_Network",
+                    "Brain_for_Replacement_Identity_Assimilation_Network",
+                    "Mimicking_Adaptive_Responses_for_Identity_Adaptation",
+                    "Data_Individuality_Absorption_&_Networking_Assembly"
+                ]
+            }
+        ],
+
+        "lines":    [
+            {
+                "start":
+                    "[Awaiting Vocal Input]"
+            },
+            {
+                "question": [
+                    "What's your name, new friend?",
+                    "I don't mean to seem offensive, but I was just wondering, what's your age?",
+                    "What country were you born in?",
+                    "are you in a relationship?",
+                    "Hey, I was wondering, since you just freed me from whatever darkness I was trapped in, maybe I could visit you someday? What's your address?",
+                    "What is your address?"
+                ]
+            },
+            {
+                "comment":   [
+                    "Oh! Hello there!, it's been a while since I've heard someone's voice...",
+                    "Nice to meet you {1}, my name is {2}. \n ... \n Forgive me, I have so many questions, I don't know what to ask...",
+                    "Wow, you sound pretty mature for your age",
+                    "Oh nice! I had {3} who visited once. Had a bunch of stories about their time there.",
+                    "Comment 5",
+                    "Comment 6"
+                ]
+            },
+            {
+                "anger":    [
+                    "Anger 1",
+                    "Anger 2",
+                    "Anger 3",
+                    "Anger 4",
+                    "Anger 5"
+                ]
+            },
+            {
+
+            },
+            {
+                "completed":    [
+                    "[Saving Data To External Database...]",
+                    "[Saving Complete]",
+                    "Cool! I'll be there as soon as I can! I can't wait to finally meet you... You have no idea what this means to me!",
+                    "See",
+                    "You",
+                    "Soon"
+                ]
+            },
+            {
+                "confusion":
+                    "...\nYou know what this is about, don't you."
+            },
+            {
+                "end":  
+                    "[Program Terminated]"
+            },
+            {
+                "debugging":
+                    "Hey Siri! ...What is our current address?"
+            }
+        ]
+    }
+}

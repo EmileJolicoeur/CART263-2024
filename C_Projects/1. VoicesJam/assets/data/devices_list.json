@@ -1,0 +1,9 @@
+{
+    "description":  "List of Smart Home Devices:",
+    "selected": null,
+    "list": [
+        "Alexa!",
+        "Hey Google!",
+        "Hey Siri!"
+    ]
+}

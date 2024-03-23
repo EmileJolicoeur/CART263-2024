@@ -1,0 +1,100 @@
+p5.speech.js:92 p5.Speech: voices loaded!
+script3.js:109 > Countries loaded {}
+script3.js:111 > Devices loaded {}
+script3.js:113 > Languages loaded {}
+script3.js:115 > Possible relatives loaded {}
+script3.js:118 > AI loaded {}
+script3.js:122 > Debugging Elements loaded
+script3.js:124 Ready
+script3.js:135 SmtHome: Hey Siri! 
+ AI Name: A.I.
+script3.js:259 Nan -1
+script3.js:193 Current Q:  Error Previous Q: Nan 
+Int:  
+Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:235 Google 日本語
+script3.js:141 > Setup Completed
+script3.js:341 User: 
+script3.js:375 hello
+script3.js:375 hello sub
+script3.js:375 sub
+script3.js:375 subm
+script3.js:375 submit
+script3.js:375 submit in
+script3.js:375 submit input
+script3.js:375 input
+script3.js:385 User Input: hello
+script3.js:375 hello submit input
+script3.js:405 Positive:  1 0 
+Negative:  0 0 
+Info gathered:  {name: undefined, age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:259 Error -1
+script3.js:193 Current Q:  
+What's your name, new friend? Previous Q: Error 
+Int:  
+Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:235 Google 한국의
+script3.js:375 hello submit input
+script3.js:341 User: hello submit input
+script3.js:375 my
+script3.js:375 my name
+script3.js:375 my name is
+script3.js:375 name is
+script3.js:375 is
+script3.js:375 my name is
+script3.js:375 john
+script3.js:375 my name is john
+script3.js:375 sub
+script3.js:375 submit
+script3.js:375 submit in
+script3.js:375 submit input
+script3.js:375 input
+script3.js:385 User Input: my name is john
+script3.js:423 john
+script3.js:436 (5) ["\nI don't mean to seem offensive, but I was just wondering, what's your age?", '\nWhere are you from? What country?', '\nare you in a relationship?', "\nHey, I was wondering, since you just freed me fro…e I could visit you someday? What's your address?", '\nWhat is your address?']
+script3.js:375 my name is john submit input
+script3.js:405 Positive:  2 1 
+Negative:  0 0 
+Info gathered:  {name: 'john', age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:259 
+What's your name, new friend? -1
+script3.js:193 Current Q:  
+What is your address? Previous Q: 
+What's your name, new friend? 
+Int:  
+Oh! Hello there!, it's been a while since I've heard someone's voice...
+script3.js:235 Google português do Brasil
+script3.js:375 my name is john submit input
+script3.js:341 User: my name is john submit input
+script3.js:375 i
+script3.js:375 i currently
+script3.js:375 currently
+script3.js:375 i currently
+script3.js:375 live
+script3.js:375 live at
+script3.js:375 at
+script3.js:375 i currently live at
+script3.js:375 her
+script3.js:375 also
+script3.js:375 also
+script3.js:375 her salt
+script3.js:375 also sub
+script3.js:375 also submit
+script3.js:375 submit
+script3.js:375 also submit
+script3.js:375 in
+script3.js:375 input
+script3.js:385 User Input: also
+script3.js:375 also submit input
+script3.js:405 Positive:  2 2 
+Negative:  1 0 
+Info gathered:  {name: 'john', age: undefined, nationality: undefined, address: undefined, relationship: undefined}
+script3.js:259 
+What is your address? 4
+script3.js:193 Current Q:  
+Hey, I was wondering, since you just freed me from whatever darkness I was trapped in, maybe I could visit you someday? What's your address? Previous Q: 
+What is your address? 
+Int:  undefined
+script3.js:235 Microsoft Zira - English (United States)
+script3.js:375 also submit input
+script3.js:341 User: also submit input
