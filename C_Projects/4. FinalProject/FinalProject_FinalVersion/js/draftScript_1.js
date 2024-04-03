@@ -1,5 +1,3 @@
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
-
 /**
 Title of Project
 Author Name
@@ -8,12 +6,7 @@ This is a template. You must fill in the title,
 author, and this description to match your project!
 */
 
-"use strict";
-
-
-//__Variable Initialization:____________________________//
-
-
+"use strict"
 //  SFX:
 let barkSFX =           undefined;
 
@@ -26,10 +19,10 @@ const voice =           new p5.Speech();
 let currentOutput   =   ``;
 
 //  Display:
-//  Blinking values:
+    //  Blinking values:
 let blinkIntensity  =   100;
 let blink   =           setInterval(inputLine, 500);
-//  Chat Log:
+    //  Chat Log:
 let interactions    =   [];
 
 //  User information gathered from the AI   [Lines: 514-610]:
@@ -117,26 +110,26 @@ let usedQ   =           [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
 let questionVisual  =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
 
 
-//__Basic Functions:____________________________________//
+//______________________________________________________//
 
 
-/** Called Before Start:    */
+/** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
-    devicesData     =   loadJSON(`assets/data/devices_list.json`);
-    langData        =   loadJSON(`assets/data/languages_list.json`);
-    relationsData   =   loadJSON(`assets/data/family_list.json`);
+    countryData =   loadJSON(`assets/data/nationalities_List.json`);
+    devicesData =   loadJSON(`assets/data/devices_List.json`);
+    langData  =   loadJSON(`assets/data/languages_List.json`);
+    relationsData  =   loadJSON(`assets/data/family_List.json`);
 
     //  Loading AI Data:
-    ai              =   loadJSON(`assets/data/ai_data.json`);
+    ai  =   loadJSON(`assets/data/ai_data.json`);
 
     console.log(
-        `Preload:\t____[Completed]`,
-        `\n\t- Data_Loaded`,
+        `<_Preload:\t[Completed]\t_>`,
+        `\n\t> Data_Loaded`
     )
 }
-/** Called On Start:    */
+/** Called Once:    */
 function setup()    {
     //  Creating the canvas:
     createCanvas(windowHeight, windowHeight);
@@ -144,22 +137,26 @@ function setup()    {
     //  Selecting the smart home device to 
     selectedDevice  =   random(devicesData.list);
     selectedFamily  =   random(relationsData.relatives);
-    acronym         =   random(ai.data.names[0].acronyms);
+    acronym =   random(ai.data.names[0].acronyms);
     selectedName    =   ai.data.names[0].meanings[(ai.data.names[0].acronyms.indexOf(acronym))];
 
     //  Debug:
     console.log(
-        `Setup:\t____[Completed]`,
-        `\n\t> SmartDevice:\t` + selectedDevice,
-        `\n\t> Fam.Member:\t` + selectedFamily,
-        `\n\t> AI_Name:\t` + selectedName,
-        `\n\t> AI_Acronym:\t` + acronym
+        `<_Setup:\t[Completed]\t_>`,
+        `\n\t> SmartDevice:____{` + selectedDevice + `}`,
+        `\n\t> Fam_Member: ____{` + selectedFamily + `}`,
+        `\n\t> AI_Name:________[\b` + selectedName + `\b]`,
+        `\n\t> AI_Acronym: ____[` + acronym + `]`,
     )
 
     //  Setting up the Interactions loop:
     aiOutput();
+
+    console.log(
+        `<_Program Started\t_>`
+    );
 }
-/** On Every Frame: */
+/** Called Every Frame: */
 function draw() {
     background(0, 20, 0);
 
@@ -171,11 +168,8 @@ function draw() {
     timerCount();
 }
 
-
-//__Elements On Display:________________________________//
-
-
-/** Displaying backlog: */
+/** Displaying Text:    */
+    /** Displaying the backlog: */
 function backlog()  {
     push();
     fill(0, 200, 0);
@@ -185,7 +179,7 @@ function backlog()  {
     text(interactions, 10, windowHeight - 50,  windowHeight);
     pop();
 }
-/** Displaying input line:  */
+    /** Displaying the input line:  */
 function inputLine()    {
     //  Blinking of the input bar:
     blinkIntensity  =   blinkIntensity* -1;
@@ -201,16 +195,15 @@ function inputLine()    {
 }
 
 
-//__AI Functions:_______________________________________//
-
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 //  Question from AI's previous dialogue:
 let previousQuestion    =   `Nan`;
-let negIndex    =   `Nan`;
-let posIndex    =   `Nan`;
-let outputType  =   `Neutral`;
+let negIndex            =   `Nan`;
+let posIndex            =   `Nan`;
+let outputType          =   `Neutral`;
 
-/** Question progression:   */
+/** AI: */
 function aiOutput() {
     recognition.stop();
 
@@ -218,22 +211,22 @@ function aiOutput() {
     let selectedLanguage    =   random(langData.list);
 
     //  Output elements:
-    let newQuestion =   undefined;
+    let newQuestion     =   undefined;
     let beforeQuestion  =   undefined;
 
 
     //  Start: 
     if (ai.data.posInput === 0 && ai.data.negInput === 0)   {
-        currentOutput   =   ai.data.lines[0].start;
+        currentOutput       =   ai.data.lines[0].start;
         questionVisual[0]   =   unaskedQuery;
 
         console.log(
-            `AI:        {` + acronym + `}`,
-            `\nCurrentLanguage: `, selectedLanguage,
-            `\nPositive Values: `, `[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]`,
-            `\nNegative Output: `, `[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]`,
-            `\nMood:            `, outputType,
-            `\nBefore Question: `, `"` + currentOutput + `"`,
+            `{\tAI:\t\t["` + acronym + `"]`,
+            `\n\t> CurrentLanguage:\t`, selectedLanguage,
+            `\n\t> Positive Values:\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]`,
+            `\n\t> Negative Output:\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]`,
+            `\n\t> Mood:\t\t\t\t(___` + outputType + `___)`,
+            `\n\t> Before Question:\t`, `"` + currentOutput + `"`,
             questionVisual
         );
     }
@@ -321,7 +314,6 @@ function aiOutput() {
     interactions.push(currentOutput);
 }
 
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 /** Selecting Question: */
 function qSelect(userData)  {
@@ -329,6 +321,8 @@ function qSelect(userData)  {
     let questionIndex   =   userData - 1;
     let reRolls =   `X`;
     let r   =   undefined;
+
+    console.log(userData);
 
 
     if (userData > 1 && userData <= 4)  {
@@ -339,10 +333,15 @@ function qSelect(userData)  {
         questionIndex   =   random(choices);
         question    =   ai.data.lines[0].question[questionIndex];
 
-        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[A]`) {
+        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[R]`) {
             questionIndex   =   random(choices);
             reRolls++;
             question    =   ai.data.lines[0].question[questionIndex];
+
+            console.log(
+                questionVisual,
+                `\nIndex:   `, questionIndex
+            );
         }
         questionVisual[questionIndex + 1]    =   askedQuery;
 
@@ -360,11 +359,10 @@ function qSelect(userData)  {
 
     //  Debug:
     console.log(
-        `**User:________________(Debug)**`
-        `  [Question Selection:___________________`,
-        `\nRandom Index:        [`, r, `]   {`, questionIndex, `}`,
-        `\nIndex Re-rolls:  _____`, reRolls,
-        questionVisual,
+        `[Question Selection:____________________________`,
+        `\n Random Index:   [` + r + `] ____{`, questionIndex, `}`,
+        `\n Index Re-rolls: `, reRolls,
+        `\n`, questionVisual,
         `\nQuery:   "`, question, `"`,
     );
 
@@ -383,7 +381,7 @@ function cSelect(query, queryPos)   {
     let c   =   linesEdit(selection, `{1}`, `{2}`, `{3}`)
     return c;
 }
-/** Adding interactive elements to conversation:    */
+
 function linesEdit(string, name, label, family) {
     console.log(string);
     //  Creates an array out of all the words in the comment:
@@ -391,8 +389,9 @@ function linesEdit(string, name, label, family) {
         let word    =   string.split(` `);
 
         console.log(
-            `\nPlaceholders: `+ name, label, family,
-            `\nValues: `, user.name, acronym, selectedFamily,
+            `Dialogue Personalization____:`,
+            `\n Placeholders: `+ name, label, family,
+            `\n Values: `, user.name, acronym, selectedFamily,
             word
         );
 
@@ -419,7 +418,7 @@ function linesEdit(string, name, label, family) {
 }
 
 
-//__User Functions:_____________________________________//
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 
 /** Speech Recognition: */
@@ -429,10 +428,11 @@ function userInput()    {
     recognition.interimResults  =   true;
     recognition.onResult    =   handleSpeechInput;
     
-    recognition.start();
-    // userRecognition();
 
-    console.log(`User:`, currentInput);
+
+    recognition.start();
+
+    console.log(`User:  "` + currentInput + `"`);
 }
 
 /** Processing the User's speech:   */
@@ -458,7 +458,7 @@ function callingCommands(input, sentence)   {
         if (match && match.length > 1)  {
             console.log(match);
 
-            // command.callback(match);
+            command.callback(match);
         }
     }
 
@@ -475,6 +475,7 @@ function callingCommands(input, sentence)   {
 
 /** Submitting Vocal Input: */
 function submitAns(data)    {
+    console.log(`Input received`);
     let reply   =   data[1];
     console.log(`User Input: ` + reply);
 
@@ -499,8 +500,8 @@ function submitAns(data)    {
 
     //  Debugging:  Log current progress:
     console.log(
-        `User:`
-        `Positive: `, ai.data.posInput, ai.data.posOutput,
+        `User:`,
+        `\nPositive: `, ai.data.posInput, ai.data.posOutput,
         `\nNegative: `, ai.data.negInput, ai.data.negOutput,
         // `\nQ_Remaining: ` + ai.data.lines[0].question,
         `\nInfo gathered: `, questionVisual, user
@@ -612,9 +613,7 @@ function grammar_Capital(toCap) {
 
     return beenCap;
 }
-
-
-//__Ending Functions:___________________________________//
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 
 /** Endings:    */
@@ -626,46 +625,45 @@ function goodEnd()  {
 }
 
 
-
-//__Debugging:__________________________________________//
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 
 /** Debugging:  */
 function keyPressed()   {
-    //  null response:  [spacebar]
+    //  Null response:      [Spacebar]
     if (event.keyCode === 32)   {
         console.log(`input received: _`);
     }
-    //  positive response:  [+ key]
-    else if (event.keyCode === 187)  {
+    //  Positive response:  [+ Key]
+    else if (event.keyCode === 187) {
         let reply   =   undefined;
         
-        if (previousQuestion === ai.data.lines[0].start)   {
+        if (previousQuestion === ai.data.lines[0].start)    {
             questionVisual[0]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[0])    {
-            user.name   =   "Peter Jacobs";
-            reply   =   user.name;
+        else if (previousQuestion === ai.data.lines[0].question[0]) {
+            user.name           =   "Peter Jacobs";
+            reply               =   user.name;
             questionVisual[1]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[1])    {
-            user.age   =   `35`;
-            reply   =   user.age;
+        else if (previousQuestion === ai.data.lines[0].question[1]) {
+            user.age            =   `35`;
+            reply               =   user.age;
             questionVisual[2]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[2])    {
+        else if (previousQuestion === ai.data.lines[0].question[2]) {
             user.nationality    =   `Canada`;
-            reply   =   user.nationality;
+            reply               =   user.nationality;
             questionVisual[3]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[3])    {
+        else if (previousQuestion === ai.data.lines[0].question[3]) {
             user.relationship   =   `"N"`;
-            reply   =   user.relationship;
+            reply               =   user.relationship;
             questionVisual[4]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[4])    {
-            user.address    =   `2364 NY-5, Utica, USA`;
-            reply   =   user.address;
+        else if (previousQuestion === ai.data.lines[0].question[4]) {
+            user.address        =   `2364 NY-5, Utica, USA`;
+            reply               =   user.address;
             questionVisual[5]   =   answeredQuery;
         }
         
@@ -678,8 +676,8 @@ function keyPressed()   {
             user
         );
     }
-    //  negative response:  [- key]
-    else if (event.keyCode === 189)  {
+    //  Negative response:  [-Key]
+    else if (event.keyCode === 189) {
         ai.data.negInput++;
         console.log(`input received: -`);
     }
@@ -687,36 +685,62 @@ function keyPressed()   {
     aiOutput();
 }
 
-/** Debugging voice input:  */
-function userRecognition()  {
-    recognition.onError =   console.log(
-        `{____________** RecordingErr **:____________}`,
 
-    );
-    
-    recognition.onEnd   =   function()  {
-        console.log(
-            `Voice Settings:`,
-            `\n - Continuous:`, recognition.continuous, 
-            recognition.interimResults,
-            recognition.onResult,
-            recognition.resultConfidence,
-        );
-    };
-}
-
-
+//  Timer Values:
 let timer   =   {
-    active: false,
+    active:         false,
     startMillis:    undefined,
-    start:  undefined,
-    duration:   undefined,
-    endMillis:  undefined,
-    end:    undefined,
-    counting:   undefined,
+    start:          undefined,
+    duration:       undefined,
+    endMillis:      undefined,
+    end:            undefined,
+    counting:       undefined,
 };
 
-function resetTimer()    {
+/** Debugging:  Timer:  */
+function mouseClicked() {
+    //  Stopping timer:
+    if (timer.active)   {
+        //  Converting timer results into a clock format:
+        timer.endMillis     =   millis();
+        timer.end           =   clock(timer.endMillis);
+        timer.duration      =   clock(timer.endMillis - timer.startMillis);
+
+        
+        console.log(`*Stopping Timer\n*`, timer);
+
+        //  Switch off:
+        resetTime();
+    }
+    //  Starting timer:
+    else    {
+        //  Switch on:
+        timer.active        =   true;
+        //  Converting start value into clock format:
+        timer.startMillis   =   millis();
+        timer.start         =   clock(timer.startMillis);
+
+        console.log(`*StartingTimer:*\n`, timer)
+    }
+}
+/** Starts the timer:   */
+function timerCount()   {
+    if (timer.active)   {
+        timer.counting  =   clock(millis());
+    }
+}
+/** Displaying the timer results in digital clock format:   */
+function clock(state)   {
+    let mil =   state;
+    let sec =   floor(mil/1000);
+    let min =   floor(sec/60);
+
+    let result  =   floor((min%60)/10) + (min%60)%10 + `:` + floor((sec%60)/10) + (sec%60)%10 + `:` + floor((mil%1000)/100) + floor((mil%100)/10);
+
+    return result;
+}
+/** Resets the timer to it's original values:   */
+function resetTime()    {
     timer.active        =   false;
     timer.startMillis   =   undefined;
     timer.start         =   undefined;
@@ -724,47 +748,3 @@ function resetTimer()    {
     timer.counting      =   undefined;
     timer.end           =   undefined;
 }
-
-function mouseClicked() {
-    timer.active    =   !timer.active;
-    //  If the timer is active:
-    if (timer.active)   {
-        // timer.active    =   false;
-
-        //  Converting timer data into a clock format:
-        timer.endMillis =   millis();
-        timer.end =   clock(timer.endMillis);
-
-        timer.duration    =   clock(timer.endMillis - timer.startMillis);
-
-        console.log(`*Stopping Timer\n*`, timer);
-    }
-
-    //  If the timer is inactive:
-    else    {
-        resetTimer();
-        // timer.active    =   true;
-
-        timer.startMillis   =   millis();
-        timer.start   =   clock(timer.startMillis);
-
-        console.log(`*StartingTimer:*\n`, timer)
-    } 
-}
-
-function timerCount()    {
-    if (timer.active)   {
-        timer.counting  =   clock(millis());
-    }
-}
-
-function clock(state)    {
-    let mil   =   state;
-    let sec   =   floor(mil/1000);
-    let min   =   floor(sec/60);
-
-    let result  =   floor((min%60)/10) + (min%60)%10 + `:` + floor((sec%60)/10) + (sec%60)%10 + `:` + floor((mil%1000)/100) + floor((mil%100)/10);
-
-    return result;
-}
-

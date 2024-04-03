@@ -1,0 +1,53 @@
+{
+    "descr":    "Data for AI:",
+    "data": {
+        "posInput":     0,
+        "posOutput":    0,
+        "negInput":     0,
+        "negOutput":    0,
+
+        "lines":    [
+            {
+                "start":
+                    "[Awaiting Input]",
+
+                "question": [
+                    "What's your name?",
+                    "What's your age?",
+                    "What country were you born in?",
+                    "Are you in a relationship?",
+                    "What's your address?"
+                ],
+
+                "comment":   [
+                    "Comment_1",
+                    "Comment_2",
+                    "Comment_3",
+                    "Comment_4",
+                    "Comment 5",
+                    "Comment 6"
+                ],
+
+                "anger":    [
+                    "Anger 1",
+                    "Anger 2",
+                    "Anger 3",
+                    "Anger 4",
+                    "Anger 5"
+                ],
+
+                "completed":    [
+                    "[Saving Data To External Database...]",
+                    "[Saving Complete]",
+                    "Cool! I'll be there as soon as I can! I can't wait to finally meet you... You have no idea what this means to me!",
+                    "See",
+                    "You",
+                    "Soon"
+                ],
+
+                "debugging":
+                    "Hey Siri! ...What is our current address?"
+            }
+        ]
+    }
+}

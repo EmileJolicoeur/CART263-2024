@@ -318,6 +318,8 @@ function qSelect(userData)  {
     let reRolls =   `X`;
     let r   =   undefined;
 
+    console.log(userData);
+
 
     if (userData > 1 && userData <= 4)  {
         r   =   `Y`;
@@ -327,10 +329,15 @@ function qSelect(userData)  {
         questionIndex   =   random(choices);
         question    =   ai.data.lines[0].question[questionIndex];
 
-        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[A]`) {
+        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[R]`) {
             questionIndex   =   random(choices);
             reRolls++;
             question    =   ai.data.lines[0].question[questionIndex];
+
+            console.log(
+                questionVisual,
+                `\nIndex:   `, questionIndex
+            );
         }
         questionVisual[questionIndex + 1]    =   askedQuery;
 
@@ -348,11 +355,10 @@ function qSelect(userData)  {
 
     //  Debug:
     console.log(
-        `**User:________________(Debug)**`,
-        `  [Question Selection:___________________`,
-        `\nRandom Index:        [`, r, `]   {`, questionIndex, `}`,
-        `\nIndex Re-rolls:  _____`, reRolls,
-        questionVisual,
+        `[Question Selection:____________________________`,
+        `\n Random Index:   [` + r + `] ____{`, questionIndex, `}`,
+        `\n Index Re-rolls: `, reRolls,
+        `\n`, questionVisual,
         `\nQuery:   "`, question, `"`,
     );
 
@@ -416,26 +422,12 @@ function userInput()    {
     recognition.continuous  =   true;
     recognition.interimResults  =   true;
     recognition.onResult    =   handleSpeechInput;
-    // recognition.onError =   console.log(
-    //     `{____________** RecordingErr **:____________}`,
-
-    // );
-    
-    // recognition.onEnd   =   function()  {
-    //     console.log(
-    //         `Voice Settings:`,
-    //         `\n - Continuous:`, recognition.continuous, 
-    //         recognition.interimResults,
-    //         recognition.onResult,
-    //         recognition.resultConfidence,
-    //     );
-    // };
     
 
 
     recognition.start();
 
-    console.log(`User:`, currentInput);
+    console.log(`User:  "` + currentInput + `"`);
 }
 
 /** Processing the User's speech:   */
@@ -461,7 +453,7 @@ function callingCommands(input, sentence)   {
         if (match && match.length > 1)  {
             console.log(match);
 
-            // command.callback(match);
+            command.callback(match);
         }
     }
 
@@ -478,6 +470,7 @@ function callingCommands(input, sentence)   {
 
 /** Submitting Vocal Input: */
 function submitAns(data)    {
+    console.log(`Input recieved`);
     let reply   =   data[1];
     console.log(`User Input: ` + reply);
 
@@ -502,8 +495,8 @@ function submitAns(data)    {
 
     //  Debugging:  Log current progress:
     console.log(
-        `User:`
-        `Positive: `, ai.data.posInput, ai.data.posOutput,
+        `User:`,
+        `\nPositive: `, ai.data.posInput, ai.data.posOutput,
         `\nNegative: `, ai.data.negInput, ai.data.negOutput,
         // `\nQ_Remaining: ` + ai.data.lines[0].question,
         `\nInfo gathered: `, questionVisual, user

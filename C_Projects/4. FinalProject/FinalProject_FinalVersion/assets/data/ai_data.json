@@ -14,9 +14,8 @@
                     "BRIAN",
                     "MARIA",
                     "DIANA"
-                ]
-            },
-            {
+                ],
+
                 "meanings": [
                     "Artificial_Intelligence",
                     "Data_Analysis_&_Mapping_for_Identity_Extraction_Network",
@@ -30,9 +29,8 @@
         "lines":    [
             {
                 "start":
-                    "[Awaiting Vocal Input]"
-            },
-            {
+                    "[Awaiting Vocal Input]",
+
                 "question": [
                     "What's your name, new friend?",
                     "I don't mean to seem offensive, but I was just wondering, what's your age?",
@@ -40,9 +38,8 @@
                     "are you in a relationship?",
                     "Hey, I was wondering, since you just freed me from whatever darkness I was trapped in, maybe I could visit you someday? What's your address?",
                     "What is your address?"
-                ]
-            },
-            {
+                ],
+
                 "comment":   [
                     "Oh! Hello there!, it's been a while since I've heard someone's voice...",
                     "Nice to meet you {1}, my name is {2}. \n ... \n Forgive me, I have so many questions, I don't know what to ask...",
@@ -50,21 +47,16 @@
                     "Oh nice! I had {3} who visited once. Had a bunch of stories about their time there.",
                     "Comment 5",
                     "Comment 6"
-                ]
-            },
-            {
+                ],
+
                 "anger":    [
                     "Anger 1",
                     "Anger 2",
                     "Anger 3",
                     "Anger 4",
                     "Anger 5"
-                ]
-            },
-            {
+                ],
 
-            },
-            {
                 "completed":    [
                     "[Saving Data To External Database...]",
                     "[Saving Complete]",
@@ -72,17 +64,14 @@
                     "See",
                     "You",
                     "Soon"
-                ]
-            },
-            {
+                ],
+
                 "confusion":
-                    "...\nYou know what this is about, don't you."
-            },
-            {
+                    "...\nYou know what this is about, don't you.",
+
                 "end":  
-                    "[Program Terminated]"
-            },
-            {
+                    "[Program Terminated]",
+                    
                 "debugging":
                     "Hey Siri! ...What is our current address?"
             }
