@@ -76,8 +76,10 @@ Handles the two states of the program: loading, running
 */
 function draw() {
     if (state === `loading`)    {
+        console.log(`loading`);
         loading();
     } else if (state === `running`) {
+        console.log(`Running`);
         running();
     }
 }
@@ -103,9 +105,9 @@ If there is a hand it outlines it and highlights the tip of the index finger
 function running()  {
     // Display the webcam with reveresd image so it's a mirror
     let flippedVideo    =   ml5.flipImage(video);
-    // image(flippedVideo, 0, 0, width, height);
+    image(flippedVideo, 0, 0, width, height);
 
-    // Check if there currently predictions to display
+    // // Check if there currently predictions to display
     if (predictions.length > 0) {
         // Technically there will only be ONE because it only detects ONE hand
         // Get the hand predicted
@@ -132,4 +134,11 @@ function highlightHand(hand)    {
     noStroke();
     ellipse(indexX, indexY, 20);
     pop();
+}
+
+
+function keyPressed()   {
+    if (event.keyCode === 32)   {
+        state   =   `running`;
+    }
 }

@@ -36,6 +36,14 @@ function setup()    {
     //  Hiding video:
     video.hide();
 }
+/** State changes:  */
+function modelReady()   {
+    state   =   STATE.MIMICKING;
+    console.log("Model ready!");
+}
+
+
+
 
 /** Called On Every Frame:  */
 function draw() {
@@ -57,11 +65,7 @@ function draw() {
 //  -   -   -   -   -   -   -   -   -   -   //
 
 
-/** State changes:  */
-function modelReady()   {
-    state   =   STATE.MIMICKING;
-    console.log("Model ready!");
-}
+
 
 /** If the mesh isn't loaded before start of draw():    */
 function startup()  {
@@ -88,8 +92,8 @@ function mimicking()    {
     // console.log(video, width/2 , height/2, video.width, video.height);
 
     // We can call both functions to draw all keypoints
-    // displayMesh(screenX, screenY);
-    displayModel();
+    displayMesh(screenX, screenY);
+    // displayModel();
 
     if (mouseIsPressed) {
         console.log(predictions);
@@ -115,38 +119,38 @@ function meshVertices(posX, posY)   {
         const vertex =   predictions[i].scaledMesh;
         // console.log(vertex);
     
-            //  Draw dots:
-            for (let j = 0; j < vertex.length; j += 1)   {
-                const [x, y]   =   vertex[j];
+        //  Draw dots:
+        for (let j = 0; j < vertex.length; j += 1)   {
+            const [x, y]   =   vertex[j];
 
-                // let centerVertexX   =   x;
-                // let centerVertexY   =   y;
+            // let centerVertexX   =   x;
+            // let centerVertexY   =   y;
 
-                push();
-                translate(4*posX/3, 5.25*posY/5);
-                if (vertex[j] === vertex[195])  {
-                    fill(255, 0, 0);
-                    ellipse(x, y, 10, 10);
-                    console.log(x, y, video.x, video.y);
-                }
-                else    {
-                    fill(0, 255, 0);
-                    ellipse(x, y, 3, 3);
-                }
-                pop();
-
-
-
-
-
-                // push();
-                // fill(255, 0, 0);
-                // textAlign(CENTER,CENTER);
-                // textSize(5);
-                // text(i+1, x, y);
-                // pop();
+            push();
+            translate(4*posX/3, 5.25*posY/5);
+            if (vertex[j] === vertex[195])  {
+                fill(255, 0, 0);
+                ellipse(x, y, 10, 10);
+                console.log(x, y, video.x, video.y);
             }
+            else    {
+                fill(0, 255, 0);
+                ellipse(x, y, 3, 3);
+            }
+            pop();
+
+
+
+
+
+            // push();
+            // fill(255, 0, 0);
+            // textAlign(CENTER,CENTER);
+            // textSize(5);
+            // text(i+1, x, y);
+            // pop();
         }
+    }
 }
 /** Displaying the mesh's edges:    */
 function meshEdges()    {
