@@ -120,6 +120,8 @@ function running()  {
         const vertex =   results[i].scaledMesh;
         // console.log(vertex);
     
+        displayMesh(vertex);
+
         //  Draw dots:
         for (let j = 0; j < vertex.length; j += 1)   {
             const [x, y]   =   vertex[j];
@@ -131,31 +133,28 @@ function running()  {
             // verticeNB(vertexX, vertexY, j);
             displayDots(vertexX, vertexY, j, vertex);
         }
-
-        displayMesh(vertex);
     }
 
     console.log(results.length);
 }
-
 function displayDots(x, y, nb, vertex)    {
     push();
-    if (vertex[nb] === vertex[195])  {
-        fill(255, 0, 0);
-        ellipse(x, y, 10, 10);
-    }
-    else if (vertex[nb] === vertex[152] || vertex[nb] === vertex[14]) {
-        fill(100, 0, 100);
-        ellipse(x, y, 10, 10);
-    }
-    else if (vertex[nb] === vertex[13] || vertex[nb] === vertex[2] || vertex[nb] === vertex[1] || vertex[nb] === vertex[5] || vertex[nb] === vertex[168]) {
-        fill(200, 0, 200);
-        ellipse(x, y, 10, 10);
-    }
-    else    {
+    // if (vertex[nb] === vertex[195])  {
+    //     fill(255, 0, 0);
+    //     ellipse(x, y, 10, 10);
+    // }
+    // else if (vertex[nb] === vertex[152] || vertex[nb] === vertex[14]) {
+    //     fill(100, 0, 100);
+    //     ellipse(x, y, 10, 10);
+    // }
+    // else if (vertex[nb] === vertex[13] || vertex[nb] === vertex[2] || vertex[nb] === vertex[1] || vertex[nb] === vertex[5] || vertex[nb] === vertex[168]) {
+    //     fill(200, 0, 200);
+    //     ellipse(x, y, 10, 10);
+    // }
+    // else    {
         fill(0, 255, 0);
         ellipse(x, y, 3, 3);
-    }
+    // }
     pop();
 }
 function verticeNB(x, y, nb)    {
@@ -172,264 +171,473 @@ function displayMesh(vertex)    {
     push();
     stroke(0, 255, 0);
     strokeWeight(1);
-    basicSeparations(vertex);
-    meshContours(vertex);
-    nose(vertex);
-    filler(vertex);
-    // heightLines(vertex);
-    // widthLines(vertex);
-    // contours(vertex);
+
+    foreheadMesh(vertex);
+    lowerEyelidMesh(vertex);
+    noseMesh(vertex);
+    upperJawMesh(vertex);
+    jawMesh(vertex);
+
     pop();
 }
 
-function basicSeparations(v)   {
-    //Middle split:
+/** Chin:   */
+function jawMesh(v) {
+    stroke(255, 100, 0);
+    //  Y0:
+    line(v[152][0]*webcamRatio.x,   v[152][1]*webcamRatio.y,    v[175][0]*webcamRatio.x,    v[175][1]*webcamRatio.y);
+    line(v[175][0]*webcamRatio.x,   v[175][1]*webcamRatio.y,    v[200][0]*webcamRatio.x,    v[200][1]*webcamRatio.y);
+    line(v[200][0]*webcamRatio.x,   v[200][1]*webcamRatio.y,    v[17][0]*webcamRatio.x,     v[17][1]*webcamRatio.y);
+    line(v[17][0]*webcamRatio.x,    v[17][1]*webcamRatio.y,     v[16][0]*webcamRatio.x,     v[16][1]*webcamRatio.y);
+    line(v[16][0]*webcamRatio.x,    v[16][1]*webcamRatio.y,     v[14][0]*webcamRatio.x,     v[14][1]*webcamRatio.y);
+    //  Y1:
+    line(v[377][0]*webcamRatio.x,   v[377][1]*webcamRatio.y,    v[396][0]*webcamRatio.x,    v[396][1]*webcamRatio.y);
+    line(v[396][0]*webcamRatio.x,   v[396][1]*webcamRatio.y,    v[421][0]*webcamRatio.x,    v[421][1]*webcamRatio.y);
+    line(v[421][0]*webcamRatio.x,   v[421][1]*webcamRatio.y,    v[314][0]*webcamRatio.x,    v[314][1]*webcamRatio.y);
+    line(v[314][0]*webcamRatio.x,   v[314][1]*webcamRatio.y,    v[315][0]*webcamRatio.x,    v[315][1]*webcamRatio.y);
+    line(v[315][0]*webcamRatio.x,   v[315][1]*webcamRatio.y,    v[317][0]*webcamRatio.x,    v[317][1]*webcamRatio.y);
+    //  Y2:
+    line(v[378][0]*webcamRatio.x,   v[378][1]*webcamRatio.y,    v[395][0]*webcamRatio.x,    v[395][1]*webcamRatio.y);
+    line(v[395][0]*webcamRatio.x,   v[395][1]*webcamRatio.y,    v[424][0]*webcamRatio.x,    v[424][1]*webcamRatio.y);
+    line(v[424][0]*webcamRatio.x,   v[424][1]*webcamRatio.y,    v[321][0]*webcamRatio.x,    v[321][1]*webcamRatio.y);
+    line(v[321][0]*webcamRatio.x,   v[321][1]*webcamRatio.y,    v[320][0]*webcamRatio.x,    v[320][1]*webcamRatio.y);
+    line(v[320][0]*webcamRatio.x,   v[320][1]*webcamRatio.y,    v[318][0]*webcamRatio.x,    v[318][1]*webcamRatio.y);
+    //  Y3:
+    line(v[308][0]*webcamRatio.x,   v[308][1]*webcamRatio.y,    v[306][0]*webcamRatio.x,    v[306][1]*webcamRatio.y);
+    line(v[306][0]*webcamRatio.x,   v[306][1]*webcamRatio.y,    v[291][0]*webcamRatio.x,    v[291][1]*webcamRatio.y);
+    line(v[291][0]*webcamRatio.x,   v[291][1]*webcamRatio.y,    v[432][0]*webcamRatio.x,    v[432][1]*webcamRatio.y);
+    line(v[432][0]*webcamRatio.x,   v[432][1]*webcamRatio.y,    v[364][0]*webcamRatio.x,    v[364][1]*webcamRatio.y);
+    line(v[364][0]*webcamRatio.x,   v[364][1]*webcamRatio.y,    v[365][0]*webcamRatio.x,    v[365][1]*webcamRatio.y);
+    //  Y-1:
+    line(v[148][0]*webcamRatio.x,   v[148][1]*webcamRatio.y,    v[171][0]*webcamRatio.x,    v[171][1]*webcamRatio.y);
+    line(v[171][0]*webcamRatio.x,   v[171][1]*webcamRatio.y,    v[201][0]*webcamRatio.x,    v[201][1]*webcamRatio.y);
+    line(v[201][0]*webcamRatio.x,   v[201][1]*webcamRatio.y,    v[84][0]*webcamRatio.x,     v[84][1]*webcamRatio.y);
+    line(v[84][0]*webcamRatio.x,    v[84][1]*webcamRatio.y,     v[85][0]*webcamRatio.x,     v[85][1]*webcamRatio.y);
+    line(v[85][0]*webcamRatio.x,    v[85][1]*webcamRatio.y,     v[87][0]*webcamRatio.x,     v[87][1]*webcamRatio.y);
+    //  Y-2:
+    line(v[149][0]*webcamRatio.x,   v[149][1]*webcamRatio.y,    v[170][0]*webcamRatio.x,    v[170][1]*webcamRatio.y);
+    line(v[170][0]*webcamRatio.x,   v[170][1]*webcamRatio.y,    v[204][0]*webcamRatio.x,    v[204][1]*webcamRatio.y);
+    line(v[204][0]*webcamRatio.x,   v[204][1]*webcamRatio.y,    v[91][0]*webcamRatio.x,     v[91][1]*webcamRatio.y);
+    line(v[91][0]*webcamRatio.x,    v[91][1]*webcamRatio.y,     v[90][0]*webcamRatio.x,     v[90][1]*webcamRatio.y);
+    line(v[90][0]*webcamRatio.x,    v[90][1]*webcamRatio.y,     v[88][0]*webcamRatio.x,     v[88][1]*webcamRatio.y);
+    //  Y-3:
+    line(v[78][0]*webcamRatio.x,    v[78][1]*webcamRatio.y,     v[76][0]*webcamRatio.x,     v[76][1]*webcamRatio.y);
+    line(v[76][0]*webcamRatio.x,    v[76][1]*webcamRatio.y,     v[61][0]*webcamRatio.x,     v[61][1]*webcamRatio.y);
+    line(v[61][0]*webcamRatio.x,    v[61][1]*webcamRatio.y,     v[212][0]*webcamRatio.x,    v[212][1]*webcamRatio.y);
+    line(v[212][0]*webcamRatio.x,   v[212][1]*webcamRatio.y,    v[135][0]*webcamRatio.x,    v[135][1]*webcamRatio.y);
+    line(v[135][0]*webcamRatio.x,   v[135][1]*webcamRatio.y,    v[136][0]*webcamRatio.x,    v[136][1]*webcamRatio.y);
+    
+    //  X1:
+    line(v[364][0]*webcamRatio.x,   v[364][1]*webcamRatio.y,    v[395][0]*webcamRatio.x,    v[395][1]*webcamRatio.y);
+    line(v[395][0]*webcamRatio.x,   v[395][1]*webcamRatio.y,    v[396][0]*webcamRatio.x,    v[396][1]*webcamRatio.y);
+    line(v[396][0]*webcamRatio.x,   v[396][1]*webcamRatio.y,    v[175][0]*webcamRatio.x,    v[175][1]*webcamRatio.y);
+    line(v[175][0]*webcamRatio.x,   v[175][1]*webcamRatio.y,    v[171][0]*webcamRatio.x,    v[171][1]*webcamRatio.y);
+    line(v[171][0]*webcamRatio.x,   v[171][1]*webcamRatio.y,    v[170][0]*webcamRatio.x,    v[170][1]*webcamRatio.y);
+    line(v[170][0]*webcamRatio.x,   v[170][1]*webcamRatio.y,    v[135][0]*webcamRatio.x,    v[135][1]*webcamRatio.y);
+    //  X2:
+    line(v[432][0]*webcamRatio.x,   v[432][1]*webcamRatio.y,    v[424][0]*webcamRatio.x,    v[424][1]*webcamRatio.y);
+    line(v[424][0]*webcamRatio.x,   v[424][1]*webcamRatio.y,    v[421][0]*webcamRatio.x,    v[421][1]*webcamRatio.y);
+    line(v[421][0]*webcamRatio.x,   v[421][1]*webcamRatio.y,    v[200][0]*webcamRatio.x,    v[200][1]*webcamRatio.y);
+    line(v[200][0]*webcamRatio.x,   v[200][1]*webcamRatio.y,    v[201][0]*webcamRatio.x,    v[201][1]*webcamRatio.y);
+    line(v[201][0]*webcamRatio.x,   v[201][1]*webcamRatio.y,    v[204][0]*webcamRatio.x,    v[204][1]*webcamRatio.y);
+    line(v[204][0]*webcamRatio.x,   v[204][1]*webcamRatio.y,    v[212][0]*webcamRatio.x,    v[212][1]*webcamRatio.y);
+    //  X3:
+    line(v[291][0]*webcamRatio.x,   v[291][1]*webcamRatio.y,    v[321][0]*webcamRatio.x,    v[321][1]*webcamRatio.y);
+    line(v[321][0]*webcamRatio.x,   v[321][1]*webcamRatio.y,    v[314][0]*webcamRatio.x,    v[314][1]*webcamRatio.y);
+    line(v[314][0]*webcamRatio.x,   v[314][1]*webcamRatio.y,    v[17][0]*webcamRatio.x,     v[17][1]*webcamRatio.y);
+    line(v[17][0]*webcamRatio.x,    v[17][1]*webcamRatio.y,     v[84][0]*webcamRatio.x,     v[84][1]*webcamRatio.y);
+    line(v[84][0]*webcamRatio.x,    v[84][1]*webcamRatio.y,     v[91][0]*webcamRatio.x,     v[91][1]*webcamRatio.y);
+    line(v[91][0]*webcamRatio.x,    v[91][1]*webcamRatio.y,     v[61][0]*webcamRatio.x,     v[61][1]*webcamRatio.y);
+    //  X4:
+    line(v[306][0]*webcamRatio.x,   v[306][1]*webcamRatio.y,    v[320][0]*webcamRatio.x,    v[320][1]*webcamRatio.y);
+    line(v[320][0]*webcamRatio.x,   v[320][1]*webcamRatio.y,    v[315][0]*webcamRatio.x,    v[315][1]*webcamRatio.y);
+    line(v[315][0]*webcamRatio.x,   v[315][1]*webcamRatio.y,    v[16][0]*webcamRatio.x,     v[16][1]*webcamRatio.y);
+    line(v[16][0]*webcamRatio.x,    v[16][1]*webcamRatio.y,     v[85][0]*webcamRatio.x,     v[85][1]*webcamRatio.y);
+    line(v[85][0]*webcamRatio.x,    v[85][1]*webcamRatio.y,     v[90][0]*webcamRatio.x,     v[90][1]*webcamRatio.y);
+    line(v[90][0]*webcamRatio.x,    v[90][1]*webcamRatio.y,     v[76][0]*webcamRatio.x,     v[76][1]*webcamRatio.y);
+    //  X5:
+    line(v[308][0]*webcamRatio.x,   v[308][1]*webcamRatio.y,    v[318][0]*webcamRatio.x,    v[318][1]*webcamRatio.y);
+    line(v[318][0]*webcamRatio.x,   v[318][1]*webcamRatio.y,    v[317][0]*webcamRatio.x,    v[317][1]*webcamRatio.y);
+    line(v[317][0]*webcamRatio.x,   v[317][1]*webcamRatio.y,    v[14][0]*webcamRatio.x,     v[14][1]*webcamRatio.y);
+    line(v[14][0]*webcamRatio.x,    v[14][1]*webcamRatio.y,     v[87][0]*webcamRatio.x,     v[87][1]*webcamRatio.y);
+    line(v[87][0]*webcamRatio.x,    v[87][1]*webcamRatio.y,     v[88][0]*webcamRatio.x,     v[88][1]*webcamRatio.y);
+    line(v[88][0]*webcamRatio.x,    v[88][1]*webcamRatio.y,     v[78][0]*webcamRatio.x,     v[78][1]*webcamRatio.y);
+}
+/** Cheeks: */
+function upperJawMesh(v)    {
+    stroke(100, 100, 255);
+    //  Y0:
     line(v[13][0]*webcamRatio.x,    v[13][1]*webcamRatio.y,     v[11][0]*webcamRatio.x,     v[11][1]*webcamRatio.y);
     line(v[11][0]*webcamRatio.x,    v[11][1]*webcamRatio.y,     v[0][0]*webcamRatio.x,      v[0][1]*webcamRatio.y);
     line(v[0][0]*webcamRatio.x,     v[0][1]*webcamRatio.y,      v[2][0]*webcamRatio.x,      v[2][1]*webcamRatio.y);
+    //  Y1:
+    line(v[312][0]*webcamRatio.x,   v[312][1]*webcamRatio.y,    v[302][0]*webcamRatio.x,    v[302][1]*webcamRatio.y);
+    line(v[302][0]*webcamRatio.x,   v[302][1]*webcamRatio.y,    v[267][0]*webcamRatio.x,    v[267][1]*webcamRatio.y);
+    line(v[267][0]*webcamRatio.x,   v[267][1]*webcamRatio.y,    v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
+    //  Y2:
+    line(v[310][0]*webcamRatio.x,   v[310][1]*webcamRatio.y,    v[304][0]*webcamRatio.x,    v[304][1]*webcamRatio.y);
+    line(v[304][0]*webcamRatio.x,   v[304][1]*webcamRatio.y,    v[270][0]*webcamRatio.x,    v[270][1]*webcamRatio.y);
+    line(v[270][0]*webcamRatio.x,   v[270][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
+    line(v[327][0]*webcamRatio.x,   v[327][1]*webcamRatio.y,    v[358][0]*webcamRatio.x,    v[358][1]*webcamRatio.y);
+    //  +Y3:
+    line(v[291][0]*webcamRatio.x,   v[291][1]*webcamRatio.y,    v[426][0]*webcamRatio.x,    v[426][1]*webcamRatio.y);
+    line(v[426][0]*webcamRatio.x,   v[426][1]*webcamRatio.y,    v[266][0]*webcamRatio.x,    v[266][1]*webcamRatio.y);
+
+    line(v[432][0]*webcamRatio.x,   v[432][1]*webcamRatio.y,    v[427][0]*webcamRatio.x,    v[427][1]*webcamRatio.y);
+    line(v[427][0]*webcamRatio.x,   v[427][1]*webcamRatio.y,    v[280][0]*webcamRatio.x,    v[280][1]*webcamRatio.y);
+
+    line(v[364][0]*webcamRatio.x,   v[364][1]*webcamRatio.y,    v[435][0]*webcamRatio.x,    v[435][1]*webcamRatio.y);
+    line(v[435][0]*webcamRatio.x,   v[435][1]*webcamRatio.y,    v[366][0]*webcamRatio.x,    v[366][1]*webcamRatio.y);
+    //  Y-1:
+    line(v[82][0]*webcamRatio.x,    v[82][1]*webcamRatio.y,     v[72][0]*webcamRatio.x,     v[72][1]*webcamRatio.y);
+    line(v[72][0]*webcamRatio.x,    v[72][1]*webcamRatio.y,     v[37][0]*webcamRatio.x,     v[37][1]*webcamRatio.y);
+    line(v[37][0]*webcamRatio.x,    v[37][1]*webcamRatio.y,     v[97][0]*webcamRatio.x,     v[97][1]*webcamRatio.y);
+    //  Y-2:
+    line(v[80][0]*webcamRatio.x,    v[80][1]*webcamRatio.y,     v[74][0]*webcamRatio.x,     v[74][1]*webcamRatio.y);
+    line(v[74][0]*webcamRatio.x,    v[74][1]*webcamRatio.y,     v[40][0]*webcamRatio.x,     v[40][1]*webcamRatio.y);
+    line(v[40][0]*webcamRatio.x,    v[40][1]*webcamRatio.y,     v[98][0]*webcamRatio.x,     v[98][1]*webcamRatio.y);
+    line(v[98][0]*webcamRatio.x,    v[98][1]*webcamRatio.y,     v[129][0]*webcamRatio.x,    v[129][1]*webcamRatio.y);
+    //  +Y-3:
+    line(v[61][0]*webcamRatio.x,    v[61][1]*webcamRatio.y,     v[206][0]*webcamRatio.x,    v[206][1]*webcamRatio.y);
+    line(v[206][0]*webcamRatio.x,   v[206][1]*webcamRatio.y,    v[36][0]*webcamRatio.x,     v[36][1]*webcamRatio.y);
+
+    line(v[212][0]*webcamRatio.x,   v[212][1]*webcamRatio.y,    v[207][0]*webcamRatio.x,    v[207][1]*webcamRatio.y);
+    line(v[207][0]*webcamRatio.x,   v[207][1]*webcamRatio.y,    v[50][0]*webcamRatio.x,     v[50][1]*webcamRatio.y);
+
+    line(v[135][0]*webcamRatio.x,   v[135][1]*webcamRatio.y,    v[215][0]*webcamRatio.x,    v[215][1]*webcamRatio.y);
+    line(v[215][0]*webcamRatio.x,   v[215][1]*webcamRatio.y,    v[137][0]*webcamRatio.x,    v[137][1]*webcamRatio.y);
+
+    //  X5:
+    line(v[78][0]*webcamRatio.x,    v[78][1]*webcamRatio.y,     v[80][0]*webcamRatio.x,     v[80][1]*webcamRatio.y);
+    line(v[80][0]*webcamRatio.x,    v[80][1]*webcamRatio.y,     v[82][0]*webcamRatio.x,     v[82][1]*webcamRatio.y);
+    line(v[82][0]*webcamRatio.x,    v[82][1]*webcamRatio.y,     v[13][0]*webcamRatio.x,     v[13][1]*webcamRatio.y);
+    line(v[13][0]*webcamRatio.x,    v[13][1]*webcamRatio.y,     v[312][0]*webcamRatio.x,    v[312][1]*webcamRatio.y);
+    line(v[312][0]*webcamRatio.x,   v[312][1]*webcamRatio.y,    v[310][0]*webcamRatio.x,    v[310][1]*webcamRatio.y);
+    line(v[310][0]*webcamRatio.x,   v[310][1]*webcamRatio.y,    v[308][0]*webcamRatio.x,    v[308][1]*webcamRatio.y);
+    //  X6:
+    line(v[76][0]*webcamRatio.x,    v[76][1]*webcamRatio.y,     v[74][0]*webcamRatio.x,     v[74][1]*webcamRatio.y);
+    line(v[74][0]*webcamRatio.x,    v[74][1]*webcamRatio.y,     v[72][0]*webcamRatio.x,     v[72][1]*webcamRatio.y);
+    line(v[72][0]*webcamRatio.x,    v[72][1]*webcamRatio.y,     v[11][0]*webcamRatio.x,     v[11][1]*webcamRatio.y);
+    line(v[11][0]*webcamRatio.x,    v[11][1]*webcamRatio.y,     v[302][0]*webcamRatio.x,    v[302][1]*webcamRatio.y);
+    line(v[302][0]*webcamRatio.x,   v[302][1]*webcamRatio.y,    v[304][0]*webcamRatio.x,    v[304][1]*webcamRatio.y);
+    line(v[304][0]*webcamRatio.x,   v[304][1]*webcamRatio.y,    v[306][0]*webcamRatio.x,    v[306][1]*webcamRatio.y);
+    //  X7:
+    line(v[61][0]*webcamRatio.x,    v[61][1]*webcamRatio.y,     v[40][0]*webcamRatio.x,     v[40][1]*webcamRatio.y);
+    line(v[40][0]*webcamRatio.x,    v[40][1]*webcamRatio.y,     v[37][0]*webcamRatio.x,     v[37][1]*webcamRatio.y);
+    line(v[37][0]*webcamRatio.x,    v[37][1]*webcamRatio.y,     v[0][0]*webcamRatio.x,      v[0][1]*webcamRatio.y);
+    line(v[0][0]*webcamRatio.x,     v[0][1]*webcamRatio.y,      v[267][0]*webcamRatio.x,    v[267][1]*webcamRatio.y);
+    line(v[267][0]*webcamRatio.x,   v[267][1]*webcamRatio.y,    v[270][0]*webcamRatio.x,    v[270][1]*webcamRatio.y);
+    line(v[270][0]*webcamRatio.x,   v[270][1]*webcamRatio.y,    v[291][0]*webcamRatio.x,    v[291][1]*webcamRatio.y);
+    //  X8:
+    line(v[58][0]*webcamRatio.x,    v[58][1]*webcamRatio.y,     v[215][0]*webcamRatio.x,    v[215][1]*webcamRatio.y);
+    line(v[215][0]*webcamRatio.x,   v[215][1]*webcamRatio.y,    v[207][0]*webcamRatio.x,    v[207][1]*webcamRatio.y);
+    line(v[207][0]*webcamRatio.x,   v[207][1]*webcamRatio.y,    v[206][0]*webcamRatio.x,    v[206][1]*webcamRatio.y);
+    line(v[206][0]*webcamRatio.x,   v[206][1]*webcamRatio.y,    v[98][0]*webcamRatio.x,     v[98][1]*webcamRatio.y);
+    line(v[98][0]*webcamRatio.x,    v[98][1]*webcamRatio.y,     v[97][0]*webcamRatio.x,     v[97][1]*webcamRatio.y);
+    line(v[97][0]*webcamRatio.x,    v[97][1]*webcamRatio.y,     v[2][0]*webcamRatio.x,      v[2][1]*webcamRatio.y);
+    line(v[2][0]*webcamRatio.x,     v[2][1]*webcamRatio.y,      v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
+    line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
+    line(v[327][0]*webcamRatio.x,   v[327][1]*webcamRatio.y,    v[426][0]*webcamRatio.x,    v[426][1]*webcamRatio.y);
+    line(v[426][0]*webcamRatio.x,   v[426][1]*webcamRatio.y,    v[427][0]*webcamRatio.x,    v[427][1]*webcamRatio.y);
+    line(v[427][0]*webcamRatio.x,   v[427][1]*webcamRatio.y,    v[435][0]*webcamRatio.x,    v[435][1]*webcamRatio.y);
+    line(v[435][0]*webcamRatio.x,   v[435][1]*webcamRatio.y,    v[288][0]*webcamRatio.x,    v[288][1]*webcamRatio.y);
+    //  X9:
+    line(v[93][0]*webcamRatio.x,    v[93][1]*webcamRatio.y,     v[137][0]*webcamRatio.x,    v[137][1]*webcamRatio.y);
+    line(v[137][0]*webcamRatio.x,   v[137][1]*webcamRatio.y,    v[50][0]*webcamRatio.x,     v[50][1]*webcamRatio.y);
+    line(v[50][0]*webcamRatio.x,    v[50][1]*webcamRatio.y,     v[36][0]*webcamRatio.x,     v[36][1]*webcamRatio.y);
+    line(v[36][0]*webcamRatio.x,    v[36][1]*webcamRatio.y,     v[129][0]*webcamRatio.x,    v[129][1]*webcamRatio.y);
+    
+    line(v[358][0]*webcamRatio.x,   v[358][1]*webcamRatio.y,    v[266][0]*webcamRatio.x,    v[266][1]*webcamRatio.y);
+    line(v[266][0]*webcamRatio.x,   v[266][1]*webcamRatio.y,    v[280][0]*webcamRatio.x,    v[280][1]*webcamRatio.y);
+    line(v[280][0]*webcamRatio.x,   v[280][1]*webcamRatio.y,    v[366][0]*webcamRatio.x,    v[366][1]*webcamRatio.y);
+    line(v[366][0]*webcamRatio.x,   v[366][1]*webcamRatio.y,    v[323][0]*webcamRatio.x,    v[323][1]*webcamRatio.y);
+}
+/** Nose:   */
+function noseMesh(v)    {
+    stroke(255, 255, 0);
+    //  Y0:
     line(v[2][0]*webcamRatio.x,     v[2][1]*webcamRatio.y,      v[94][0]*webcamRatio.x,     v[94][1]*webcamRatio.y);
     line(v[94][0]*webcamRatio.x,    v[94][1]*webcamRatio.y,     v[19][0]*webcamRatio.x,     v[19][1]*webcamRatio.y);
     line(v[19][0]*webcamRatio.x,    v[19][1]*webcamRatio.y,     v[1][0]*webcamRatio.x,      v[1][1]*webcamRatio.y);
-    line(v[1][0]*webcamRatio.x,     v[1][1]*webcamRatio.y,      v[5][0]*webcamRatio.x,     v[5][1]*webcamRatio.y);
-}
-
-function filler(v)  {
-    //  Nose:
-    line(v[250][0]*webcamRatio.x,   v[250][1]*webcamRatio.y,    v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
-    line(v[370][0]*webcamRatio.x,   v[370][1]*webcamRatio.y,    v[2][0]*webcamRatio.x,      v[2][1]*webcamRatio.y);
-    line(v[2][0]*webcamRatio.x,     v[2][1]*webcamRatio.y,      v[141][0]*webcamRatio.x,    v[141][1]*webcamRatio.y);
-    line(v[141][0]*webcamRatio.x,   v[141][1]*webcamRatio.y,    v[20][0]*webcamRatio.x,     v[20][1]*webcamRatio.y);
-    line(v[458][0]*webcamRatio.x,   v[458][1]*webcamRatio.y,    v[354][0]*webcamRatio.x,    v[354][1]*webcamRatio.y);
-    line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[19][0]*webcamRatio.x,     v[19][1]*webcamRatio.y);
-    line(v[19][0]*webcamRatio.x,    v[19][1]*webcamRatio.y,     v[125][0]*webcamRatio.x,    v[125][1]*webcamRatio.y);
-    line(v[125][0]*webcamRatio.x,   v[125][1]*webcamRatio.y,    v[238][0]*webcamRatio.x,    v[238][1]*webcamRatio.y);
-
-    //  Nostril_Midridge:
-    line(v[438][0]*webcamRatio.x,   v[438][1]*webcamRatio.y,    v[457][0]*webcamRatio.x,    v[457][1]*webcamRatio.y);
-    line(v[457][0]*webcamRatio.x,   v[457][1]*webcamRatio.y,    v[274][0]*webcamRatio.x,    v[274][1]*webcamRatio.y);
-    line(v[274][0]*webcamRatio.x,   v[274][1]*webcamRatio.y,    v[1][0]*webcamRatio.x,      v[1][1]*webcamRatio.y);
-    line(v[1][0]*webcamRatio.x,     v[1][1]*webcamRatio.y,      v[44][0]*webcamRatio.x,     v[44][1]*webcamRatio.y);
-    line(v[44][0]*webcamRatio.x,    v[44][1]*webcamRatio.y,     v[237][0]*webcamRatio.x,    v[237][1]*webcamRatio.y);
-    line(v[237][0]*webcamRatio.x,   v[237][1]*webcamRatio.y,    v[218][0]*webcamRatio.x,    v[218][1]*webcamRatio.y);
-    
-    line(v[275][0]*webcamRatio.x,   v[275][1]*webcamRatio.y,    v[4][0]*webcamRatio.x,      v[4][1]*webcamRatio.y);
-    line(v[4][0]*webcamRatio.x,     v[4][1]*webcamRatio.y,      v[45][0]*webcamRatio.x,     v[45][1]*webcamRatio.y);
-    
+    line(v[1][0]*webcamRatio.x,     v[1][1]*webcamRatio.y,      v[4][0]*webcamRatio.x,      v[4][1]*webcamRatio.y);
+    line(v[4][0]*webcamRatio.x,     v[4][1]*webcamRatio.y,      v[195][0]*webcamRatio.x,    v[195][1]*webcamRatio.y);
+    //  Y1:
+    line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
+    line(v[370][0]*webcamRatio.x,   v[370][1]*webcamRatio.y,    v[354][0]*webcamRatio.x,    v[354][1]*webcamRatio.y);
     line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[274][0]*webcamRatio.x,    v[274][1]*webcamRatio.y);
     line(v[274][0]*webcamRatio.x,   v[274][1]*webcamRatio.y,    v[275][0]*webcamRatio.x,    v[275][1]*webcamRatio.y);
-    line(v[275][0]*webcamRatio.x,   v[275][1]*webcamRatio.y,    v[363][0]*webcamRatio.x,    v[363][1]*webcamRatio.y);
-    //  Nostril_R:
-    line(v[290][0]*webcamRatio.x,   v[290][1]*webcamRatio.y,    v[328][0]*webcamRatio.x,    v[328][1]*webcamRatio.y);
-    line(v[328][0]*webcamRatio.x,   v[328][1]*webcamRatio.y,    v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
-    line(v[305][0]*webcamRatio.x,   v[305][1]*webcamRatio.y,    v[460][0]*webcamRatio.x,    v[460][1]*webcamRatio.y);
-    line(v[460][0]*webcamRatio.x,   v[460][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
-    line(v[289][0]*webcamRatio.x,   v[289][1]*webcamRatio.y,    v[294][0]*webcamRatio.x,    v[294][1]*webcamRatio.y);
-    line(v[294][0]*webcamRatio.x,   v[294][1]*webcamRatio.y,    v[358][0]*webcamRatio.x,    v[358][1]*webcamRatio.y);
-    line(v[392][0]*webcamRatio.x,   v[392][1]*webcamRatio.y,    v[439][0]*webcamRatio.x,    v[439][1]*webcamRatio.y);
-    line(v[439][0]*webcamRatio.x,   v[439][1]*webcamRatio.y,    v[279][0]*webcamRatio.x,    v[279][1]*webcamRatio.y);
-    line(v[309][0]*webcamRatio.x,   v[309][1]*webcamRatio.y,    v[438][0]*webcamRatio.x,    v[438][1]*webcamRatio.y);
-    line(v[438][0]*webcamRatio.x,   v[438][1]*webcamRatio.y,    v[360][0]*webcamRatio.x,    v[360][1]*webcamRatio.y);
 
-    
-    line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[274][0]*webcamRatio.x,    v[274][1]*webcamRatio.y);
-    line(v[274][0]*webcamRatio.x,   v[274][1]*webcamRatio.y,    v[275][0]*webcamRatio.x,    v[275][1]*webcamRatio.y);
-    line(v[275][0]*webcamRatio.x,   v[275][1]*webcamRatio.y,    v[363][0]*webcamRatio.x,    v[363][1]*webcamRatio.y);
+    line(v[275][0]*webcamRatio.x,   v[275][1]*webcamRatio.y,    v[248][0]*webcamRatio.x,    v[248][1]*webcamRatio.y);
+    //  Y2:
+    line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[290][0]*webcamRatio.x,    v[290][1]*webcamRatio.y);
+    // line(v[290][0]*webcamRatio.x,   v[290][1]*webcamRatio.y,    v[309][0]*webcamRatio.x,    v[309][1]*webcamRatio.y);
+    line(v[309][0]*webcamRatio.x,   v[309][1]*webcamRatio.y,    v[344][0]*webcamRatio.x,    v[344][1]*webcamRatio.y);
+    line(v[344][0]*webcamRatio.x,   v[344][1]*webcamRatio.y,    v[420][0]*webcamRatio.x,    v[420][1]*webcamRatio.y);
+    //  Y-1:
+    line(v[97][0]*webcamRatio.x,    v[97][1]*webcamRatio.y,     v[141][0]*webcamRatio.x,    v[141][1]*webcamRatio.y);
+    line(v[141][0]*webcamRatio.x,   v[141][1]*webcamRatio.y,    v[125][0]*webcamRatio.x,    v[125][1]*webcamRatio.y);
+    line(v[125][0]*webcamRatio.x,   v[125][1]*webcamRatio.y,    v[44][0]*webcamRatio.x,     v[44][1]*webcamRatio.y);
+    line(v[44][0]*webcamRatio.x,    v[44][1]*webcamRatio.y,     v[45][0]*webcamRatio.x,     v[45][1]*webcamRatio.y);
 
-    line(v[457][0]*webcamRatio.x,   v[457][1]*webcamRatio.y,    v[363][0]*webcamRatio.x,    v[363][1]*webcamRatio.y);
-    // line(v[363][0]*webcamRatio.x,   v[363][1]*webcamRatio.y,    v[275][0]*webcamRatio.x,    v[275][1]*webcamRatio.y);
+    line(v[45][0]*webcamRatio.x,    v[45][1]*webcamRatio.y,     v[3][0]*webcamRatio.x,      v[3][1]*webcamRatio.y);
 
+    //  Y-2:
+    line(v[97][0]*webcamRatio.x,    v[97][1]*webcamRatio.y,     v[60][0]*webcamRatio.x,     v[60][1]*webcamRatio.y);
+    // line(v[60][0]*webcamRatio.x,    v[60][1]*webcamRatio.y,     v[79][0]*webcamRatio.x,     v[79][1]*webcamRatio.y);
+    line(v[79][0]*webcamRatio.x,    v[79][1]*webcamRatio.y,     v[115][0]*webcamRatio.x,    v[115][1]*webcamRatio.y);
+    line(v[115][0]*webcamRatio.x,   v[115][1]*webcamRatio.y,    v[198][0]*webcamRatio.x,    v[198][1]*webcamRatio.y);
+    //  Y-3:
 
-    // line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[438][0]*webcamRatio.x,    v[438][1]*webcamRatio.y);
-    // line(v[438][0]*webcamRatio.x,   v[438][1]*webcamRatio.y,    v[439][0]*webcamRatio.x,    v[439][1]*webcamRatio.y);
-    // line(v[439][0]*webcamRatio.x,   v[439][1]*webcamRatio.y,    v[294][0]*webcamRatio.x,    v[294][1]*webcamRatio.y);
-    // line(v[294][0]*webcamRatio.x,   v[294][1]*webcamRatio.y,    v[460][0]*webcamRatio.x,    v[460][1]*webcamRatio.y);
-    // line(v[460][0]*webcamRatio.x,   v[460][1]*webcamRatio.y,    v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
-    // line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
-}
+    //  X8:
+    line(v[98][0]*webcamRatio.x,    v[98][1]*webcamRatio.y,     v[75][0]*webcamRatio.x,     v[75][1]*webcamRatio.y);
 
-function meshContours(v)   {
-    //  Nostril_R:
+    line(v[75][0]*webcamRatio.x,    v[75][1]*webcamRatio.y,     v[60][0]*webcamRatio.x,     v[60][1]*webcamRatio.y);
+    line(v[60][0]*webcamRatio.x,    v[60][1]*webcamRatio.y,     v[20][0]*webcamRatio.x,     v[20][1]*webcamRatio.y);
+    line(v[20][0]*webcamRatio.x,    v[20][1]*webcamRatio.y,     v[238][0]*webcamRatio.x,    v[238][1]*webcamRatio.y);
+    line(v[238][0]*webcamRatio.x,   v[238][1]*webcamRatio.y,    v[79][0]*webcamRatio.x,     v[79][1]*webcamRatio.y);
+    line(v[79][0]*webcamRatio.x,    v[79][1]*webcamRatio.y,     v[166][0]*webcamRatio.x,    v[166][1]*webcamRatio.y);
+    line(v[166][0]*webcamRatio.x,   v[166][1]*webcamRatio.y,    v[75][0]*webcamRatio.x,     v[75][1]*webcamRatio.y);
+
+    line(v[238][0]*webcamRatio.x,   v[238][1]*webcamRatio.y,    v[125][0]*webcamRatio.x,    v[125][1]*webcamRatio.y);
+    line(v[125][0]*webcamRatio.x,   v[125][1]*webcamRatio.y,    v[19][0]*webcamRatio.x,     v[19][1]*webcamRatio.y);
+    line(v[19][0]*webcamRatio.x,    v[19][1]*webcamRatio.y,     v[354][0]*webcamRatio.x,    v[354][1]*webcamRatio.y);
+    line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[458][0]*webcamRatio.x,    v[458][1]*webcamRatio.y);
+
+    line(v[458][0]*webcamRatio.x,   v[458][1]*webcamRatio.y,    v[250][0]*webcamRatio.x,    v[250][1]*webcamRatio.y);
     line(v[250][0]*webcamRatio.x,   v[250][1]*webcamRatio.y,    v[290][0]*webcamRatio.x,    v[290][1]*webcamRatio.y);
     line(v[290][0]*webcamRatio.x,   v[290][1]*webcamRatio.y,    v[305][0]*webcamRatio.x,    v[305][1]*webcamRatio.y);
-    line(v[305][0]*webcamRatio.x,   v[305][1]*webcamRatio.y,    v[289][0]*webcamRatio.x,    v[289][1]*webcamRatio.y);
-    line(v[289][0]*webcamRatio.x,   v[289][1]*webcamRatio.y,    v[392][0]*webcamRatio.x,    v[392][1]*webcamRatio.y);
+    line(v[305][0]*webcamRatio.x,   v[305][1]*webcamRatio.y,    v[392][0]*webcamRatio.x,    v[392][1]*webcamRatio.y);
     line(v[392][0]*webcamRatio.x,   v[392][1]*webcamRatio.y,    v[309][0]*webcamRatio.x,    v[309][1]*webcamRatio.y);
     line(v[309][0]*webcamRatio.x,   v[309][1]*webcamRatio.y,    v[458][0]*webcamRatio.x,    v[458][1]*webcamRatio.y);
-    line(v[458][0]*webcamRatio.x,   v[458][1]*webcamRatio.y,    v[250][0]*webcamRatio.x,    v[250][1]*webcamRatio.y);
-    //  Nostril_L:
-    line(v[20][0]*webcamRatio.x,    v[20][1]*webcamRatio.y,     v[60][0]*webcamRatio.x,     v[60][1]*webcamRatio.y);
-    line(v[60][0]*webcamRatio.x,    v[60][1]*webcamRatio.y,     v[75][0]*webcamRatio.x,     v[75][1]*webcamRatio.y);
-    line(v[75][0]*webcamRatio.x,    v[75][1]*webcamRatio.y,     v[59][0]*webcamRatio.x,     v[59][1]*webcamRatio.y);
-    line(v[59][0]*webcamRatio.x,    v[59][1]*webcamRatio.y,     v[166][0]*webcamRatio.x,    v[166][1]*webcamRatio.y);
-    line(v[166][0]*webcamRatio.x,   v[166][1]*webcamRatio.y,    v[79][0]*webcamRatio.x,     v[79][1]*webcamRatio.y);
-    line(v[79][0]*webcamRatio.x,    v[79][1]*webcamRatio.y,     v[238][0]*webcamRatio.x,    v[238][1]*webcamRatio.y);
-    line(v[238][0]*webcamRatio.x,   v[238][1]*webcamRatio.y,    v[20][0]*webcamRatio.x,     v[20][1]*webcamRatio.y);
-    //  Mouth:
-    line(v[14][0]*webcamRatio.x,    v[14][1]*webcamRatio.y,     v[402][0]*webcamRatio.x,    v[402][1]*webcamRatio.y);
-    line(v[402][0]*webcamRatio.x,   v[402][1]*webcamRatio.y,    v[324][0]*webcamRatio.x,    v[324][1]*webcamRatio.y);
-    line(v[324][0]*webcamRatio.x,   v[324][1]*webcamRatio.y,    v[308][0]*webcamRatio.x,    v[308][1]*webcamRatio.y);
-    line(v[308][0]*webcamRatio.x,   v[308][1]*webcamRatio.y,    v[415][0]*webcamRatio.x,    v[415][1]*webcamRatio.y);
-    line(v[415][0]*webcamRatio.x,   v[415][1]*webcamRatio.y,    v[311][0]*webcamRatio.x,    v[311][1]*webcamRatio.y);
-    line(v[311][0]*webcamRatio.x,   v[311][1]*webcamRatio.y,    v[13][0]*webcamRatio.x,     v[13][1]*webcamRatio.y);
-    line(v[13][0]*webcamRatio.x,    v[13][1]*webcamRatio.y,     v[81][0]*webcamRatio.x,     v[81][1]*webcamRatio.y);
-    line(v[81][0]*webcamRatio.x,    v[81][1]*webcamRatio.y,     v[191][0]*webcamRatio.x,    v[191][1]*webcamRatio.y);
-    line(v[191][0]*webcamRatio.x,   v[191][1]*webcamRatio.y,    v[78][0]*webcamRatio.x,     v[78][1]*webcamRatio.y);
-    line(v[78][0]*webcamRatio.x,    v[78][1]*webcamRatio.y,     v[95][0]*webcamRatio.x,     v[95][1]*webcamRatio.y);
-    line(v[95][0]*webcamRatio.x,    v[95][1]*webcamRatio.y,     v[178][0]*webcamRatio.x,    v[178][1]*webcamRatio.y);
-    line(v[178][0]*webcamRatio.x,   v[178][1]*webcamRatio.y,    v[14][0]*webcamRatio.x,     v[14][1]*webcamRatio.y);
-    //  Eye_R:
-}
-function nose(v)    {
-    //  Nostril_R:
-    line(v[370][0]*webcamRatio.x,   v[370][1]*webcamRatio.y,    v[354][0]*webcamRatio.x,    v[354][1]*webcamRatio.y);
-    line(v[354][0]*webcamRatio.x,   v[354][1]*webcamRatio.y,    v[438][0]*webcamRatio.x,    v[438][1]*webcamRatio.y);
-    line(v[438][0]*webcamRatio.x,   v[438][1]*webcamRatio.y,    v[439][0]*webcamRatio.x,    v[439][1]*webcamRatio.y);
-    line(v[439][0]*webcamRatio.x,   v[439][1]*webcamRatio.y,    v[294][0]*webcamRatio.x,    v[294][1]*webcamRatio.y);
-    line(v[294][0]*webcamRatio.x,   v[294][1]*webcamRatio.y,    v[460][0]*webcamRatio.x,    v[460][1]*webcamRatio.y);
-    line(v[460][0]*webcamRatio.x,   v[460][1]*webcamRatio.y,    v[328][0]*webcamRatio.x,    v[328][1]*webcamRatio.y);
-    line(v[328][0]*webcamRatio.x,   v[328][1]*webcamRatio.y,    v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
-    //  Nostril_L:
-    line(v[141][0]*webcamRatio.x,   v[141][1]*webcamRatio.y,    v[125][0]*webcamRatio.x,    v[125][1]*webcamRatio.y);
-    line(v[125][0]*webcamRatio.x,   v[125][1]*webcamRatio.y,    v[218][0]*webcamRatio.x,    v[218][1]*webcamRatio.y);
-    line(v[218][0]*webcamRatio.x,   v[218][1]*webcamRatio.y,    v[219][0]*webcamRatio.x,    v[219][1]*webcamRatio.y);
-    line(v[219][0]*webcamRatio.x,   v[219][1]*webcamRatio.y,    v[64][0]*webcamRatio.x,     v[64][1]*webcamRatio.y);
-    line(v[64][0]*webcamRatio.x,    v[64][1]*webcamRatio.y,     v[240][0]*webcamRatio.x,    v[240][1]*webcamRatio.y);
-    line(v[240][0]*webcamRatio.x,   v[240][1]*webcamRatio.y,    v[99][0]*webcamRatio.x,     v[99][1]*webcamRatio.y);
-    line(v[99][0]*webcamRatio.x,    v[99][1]*webcamRatio.y,     v[141][0]*webcamRatio.x,    v[141][1]*webcamRatio.y);
-    //  Nose Bottom:    //Nostril_R:
-    line(v[2][0]*webcamRatio.x,     v[2][1]*webcamRatio.y,      v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
-    line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
-    line(v[327][0]*webcamRatio.x,   v[327][1]*webcamRatio.y,    v[358][0]*webcamRatio.x,    v[358][1]*webcamRatio.y);
-    // line(v[358][0]*webcamRatio.x,   v[358][1]*webcamRatio.y,    v[294][0]*webcamRatio.x,    v[294][1]*webcamRatio.y);
-    // line(v[294][0]*webcamRatio.x,   v[294][1]*webcamRatio.y,    v[460][0]*webcamRatio.x,    v[460][1]*webcamRatio.y);
-    // line(v[460][0]*webcamRatio.x,   v[460][1]*webcamRatio.y,    v[326][0]*webcamRatio.x,    v[326][1]*webcamRatio.y);
-    // line(v[326][0]*webcamRatio.x,   v[326][1]*webcamRatio.y,    v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
-}
 
-function heightLines(v)    {
-    //  Center:
-    line(v[152][0]*webcamRatio.x,   v[152][1]*webcamRatio.y,    v[199][0]*webcamRatio.x,    v[199][1]*webcamRatio.y);
-    line(v[199][0]*webcamRatio.x,   v[199][1]*webcamRatio.y,    v[18][0]*webcamRatio.x,     v[18][1]*webcamRatio.y);
-    line(v[18][0]*webcamRatio.x,    v[18][1]*webcamRatio.y,     v[16][0]*webcamRatio.x,     v[16][1]*webcamRatio.y);
-    line(v[16][0]*webcamRatio.x,    v[16][1]*webcamRatio.y,     v[14][0]*webcamRatio.x,     v[14][1]*webcamRatio.y);
+    line(v[305][0]*webcamRatio.x,   v[305][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
+
+    //  X9:
+    line(v[129][0]*webcamRatio.x,   v[129][1]*webcamRatio.y,    v[102][0]*webcamRatio.x,    v[102][1]*webcamRatio.y);
+    line(v[102][0]*webcamRatio.x,   v[102][1]*webcamRatio.y,    v[48][0]*webcamRatio.x,     v[48][1]*webcamRatio.y);
+    line(v[48][0]*webcamRatio.x,    v[48][1]*webcamRatio.y,     v[166][0]*webcamRatio.x,    v[166][1]*webcamRatio.y);
+    // line(v[166][0]*webcamRatio.x,   v[166][1]*webcamRatio.y,    v[20][0]*webcamRatio.x,    v[20][1]*webcamRatio.y);
+    line(v[20][0]*webcamRatio.x,    v[20][1]*webcamRatio.y,     v[141][0]*webcamRatio.x,    v[141][1]*webcamRatio.y);
+    line(v[141][0]*webcamRatio.x,   v[141][1]*webcamRatio.y,    v[94][0]*webcamRatio.x,     v[94][1]*webcamRatio.y);
+    line(v[94][0]*webcamRatio.x,    v[94][1]*webcamRatio.y,     v[370][0]*webcamRatio.x,    v[370][1]*webcamRatio.y);
+    line(v[370][0]*webcamRatio.x,   v[370][1]*webcamRatio.y,    v[250][0]*webcamRatio.x,    v[250][1]*webcamRatio.y);
+    // line(v[250][0]*webcamRatio.x,   v[250][1]*webcamRatio.y,    v[392][0]*webcamRatio.x,    v[392][1]*webcamRatio.y);
+    line(v[392][0]*webcamRatio.x,   v[392][1]*webcamRatio.y,    v[278][0]*webcamRatio.x,    v[278][1]*webcamRatio.y);
+    line(v[278][0]*webcamRatio.x,   v[278][1]*webcamRatio.y,    v[331][0]*webcamRatio.x,    v[331][1]*webcamRatio.y);
+    line(v[331][0]*webcamRatio.x,   v[331][1]*webcamRatio.y,    v[358][0]*webcamRatio.x,    v[358][1]*webcamRatio.y);
     
-    line(v[13][0]*webcamRatio.x,    v[13][1]*webcamRatio.y,     v[11][0]*webcamRatio.x,     v[11][1]*webcamRatio.y);
-    line(v[11][0]*webcamRatio.x,    v[11][1]*webcamRatio.y,     v[164][0]*webcamRatio.x,    v[164][1]*webcamRatio.y);
-    line(v[164][0]*webcamRatio.x,   v[164][1]*webcamRatio.y,    v[2][0]*webcamRatio.x,      v[2][1]*webcamRatio.y);
-    line(v[2][0]*webcamRatio.x,     v[2][1]*webcamRatio.y,      v[19][0]*webcamRatio.x,     v[19][1]*webcamRatio.y);
-    
-    //  Right1:
-    line(v[400][0]*webcamRatio.x,   v[400][1]*webcamRatio.y,    v[262][0]*webcamRatio.x,    v[262][1]*webcamRatio.y);
-    line(v[262][0]*webcamRatio.x,   v[262][1]*webcamRatio.y,    v[406][0]*webcamRatio.x,    v[406][1]*webcamRatio.y);
-    line(v[406][0]*webcamRatio.x,   v[406][1]*webcamRatio.y,    v[404][0]*webcamRatio.x,    v[404][1]*webcamRatio.y);
-    line(v[404][0]*webcamRatio.x,   v[404][1]*webcamRatio.y,    v[402][0]*webcamRatio.x,    v[402][1]*webcamRatio.y);
+    //  X10:
+    line(v[79][0]*webcamRatio.x,    v[79][1]*webcamRatio.y,     v[44][0]*webcamRatio.x,     v[44][1]*webcamRatio.y);
+    line(v[44][0]*webcamRatio.x,    v[44][1]*webcamRatio.y,     v[1][0]*webcamRatio.x,      v[1][1]*webcamRatio.y);
+    line(v[1][0]*webcamRatio.x,     v[1][1]*webcamRatio.y,      v[274][0]*webcamRatio.x,    v[274][1]*webcamRatio.y);
+    line(v[274][0]*webcamRatio.x,   v[274][1]*webcamRatio.y,    v[309][0]*webcamRatio.x,    v[309][1]*webcamRatio.y);
 
-    line(v[311][0]*webcamRatio.x,   v[311][1]*webcamRatio.y,    v[303][0]*webcamRatio.x,    v[303][1]*webcamRatio.y);
-    line(v[303][0]*webcamRatio.x,   v[303][1]*webcamRatio.y,    v[391][0]*webcamRatio.x,    v[391][1]*webcamRatio.y);
-
-    //  Right2:
-    line(v[379][0]*webcamRatio.x,   v[379][1]*webcamRatio.y,    v[430][0]*webcamRatio.x,    v[430][1]*webcamRatio.y);
-    line(v[430][0]*webcamRatio.x,   v[430][1]*webcamRatio.y,    v[273][0]*webcamRatio.x,    v[273][1]*webcamRatio.y);
-    line(v[273][0]*webcamRatio.x,   v[273][1]*webcamRatio.y,    v[307][0]*webcamRatio.x,    v[307][1]*webcamRatio.y);
-    line(v[307][0]*webcamRatio.x,   v[307][1]*webcamRatio.y,    v[324][0]*webcamRatio.x,    v[324][1]*webcamRatio.y);
-    
-    //  Right3:
-    line(v[308][0]*webcamRatio.x,   v[308][1]*webcamRatio.y,    v[306][0]*webcamRatio.x,    v[306][1]*webcamRatio.y);
-    line(v[306][0]*webcamRatio.x,   v[306][1]*webcamRatio.y,    v[287][0]*webcamRatio.x,    v[287][1]*webcamRatio.y);
-    line(v[287][0]*webcamRatio.x,   v[287][1]*webcamRatio.y,    v[434][0]*webcamRatio.x,    v[434][1]*webcamRatio.y);
-    line(v[434][0]*webcamRatio.x,   v[434][1]*webcamRatio.y,    v[365][0]*webcamRatio.x,    v[365][1]*webcamRatio.y);
-    
-    line(v[415][0]*webcamRatio.x,   v[415][1]*webcamRatio.y,    v[408][0]*webcamRatio.x,    v[408][1]*webcamRatio.y);
-    line(v[408][0]*webcamRatio.x,   v[408][1]*webcamRatio.y,    v[410][0]*webcamRatio.x,    v[410][1]*webcamRatio.y);
-    line(v[410][0]*webcamRatio.x,   v[410][1]*webcamRatio.y,    v[427][0]*webcamRatio.x,    v[427][1]*webcamRatio.y);
+    //  X11:
+    line(v[98][0]*webcamRatio.x,    v[98][1]*webcamRatio.y,     v[48][0]*webcamRatio.x,     v[48][1]*webcamRatio.y);
+    line(v[48][0]*webcamRatio.x,    v[48][1]*webcamRatio.y,     v[115][0]*webcamRatio.x,    v[115][1]*webcamRatio.y);
+    line(v[115][0]*webcamRatio.x,   v[115][1]*webcamRatio.y,    v[45][0]*webcamRatio.x,     v[45][1]*webcamRatio.y);
+    line(v[45][0]*webcamRatio.x,    v[45][1]*webcamRatio.y,     v[4][0]*webcamRatio.x,      v[4][1]*webcamRatio.y);
+    line(v[4][0]*webcamRatio.x,     v[4][1]*webcamRatio.y,      v[275][0]*webcamRatio.x,    v[275][1]*webcamRatio.y);
+    line(v[275][0]*webcamRatio.x,   v[275][1]*webcamRatio.y,    v[344][0]*webcamRatio.x,    v[344][1]*webcamRatio.y);
+    line(v[344][0]*webcamRatio.x,   v[344][1]*webcamRatio.y,    v[278][0]*webcamRatio.x,    v[278][1]*webcamRatio.y);
+    line(v[278][0]*webcamRatio.x,   v[278][1]*webcamRatio.y,    v[327][0]*webcamRatio.x,    v[327][1]*webcamRatio.y);
+    //  X12:
+    line(v[102][0]*webcamRatio.x,   v[102][1]*webcamRatio.y,    v[198][0]*webcamRatio.x,    v[198][1]*webcamRatio.y);
+    line(v[198][0]*webcamRatio.x,   v[198][1]*webcamRatio.y,    v[3][0]*webcamRatio.x,      v[3][1]*webcamRatio.y);
+    line(v[3][0]*webcamRatio.x,     v[3][1]*webcamRatio.y,      v[195][0]*webcamRatio.x,    v[195][1]*webcamRatio.y);
+    line(v[195][0]*webcamRatio.x,   v[195][1]*webcamRatio.y,    v[248][0]*webcamRatio.x,    v[248][1]*webcamRatio.y);
+    line(v[248][0]*webcamRatio.x,   v[248][1]*webcamRatio.y,    v[420][0]*webcamRatio.x,    v[420][1]*webcamRatio.y);
+    line(v[420][0]*webcamRatio.x,   v[420][1]*webcamRatio.y,    v[331][0]*webcamRatio.x,    v[331][1]*webcamRatio.y);
 }
-function widthLines(v) {
-    //  Mouth loop #1:
-    line(vertex[16][0]*webcamRatio.x, vertex[16][1]*webcamRatio.y, vertex[404][0]*webcamRatio.x, vertex[404][1]*webcamRatio.y);
-    line(vertex[404][0]*webcamRatio.x, vertex[404][1]*webcamRatio.y, vertex[307][0]*webcamRatio.x, vertex[307][1]*webcamRatio.y);
-    line(vertex[307][0]*webcamRatio.x, vertex[307][1]*webcamRatio.y, vertex[306][0]*webcamRatio.x, vertex[306][1]*webcamRatio.y);
-    line(vertex[306][0]*webcamRatio.x, vertex[306][1]*webcamRatio.y, vertex[408][0]*webcamRatio.x, vertex[408][1]*webcamRatio.y);
-    line(vertex[408][0]*webcamRatio.x, vertex[408][1]*webcamRatio.y, vertex[303][0]*webcamRatio.x, vertex[303][1]*webcamRatio.y);
-    line(vertex[303][0]*webcamRatio.x, vertex[303][1]*webcamRatio.y, vertex[11][0]*webcamRatio.x, vertex[11][1]*webcamRatio.y);
-    line(vertex[11][0]*webcamRatio.x, vertex[11][1]*webcamRatio.y, vertex[73][0]*webcamRatio.x, vertex[73][1]*webcamRatio.y);
-    line(vertex[73][0]*webcamRatio.x, vertex[73][1]*webcamRatio.y, vertex[184][0]*webcamRatio.x, vertex[184][1]*webcamRatio.y);
-    line(vertex[184][0]*webcamRatio.x, vertex[184][1]*webcamRatio.y, vertex[76][0]*webcamRatio.x, vertex[76][1]*webcamRatio.y);
-    line(vertex[76][0]*webcamRatio.x, vertex[76][1]*webcamRatio.y, vertex[77][0]*webcamRatio.x, vertex[77][1]*webcamRatio.y);
-    line(vertex[77][0]*webcamRatio.x, vertex[77][1]*webcamRatio.y, vertex[180][0]*webcamRatio.x, vertex[180][1]*webcamRatio.y);
-    line(vertex[180][0]*webcamRatio.x, vertex[180][1]*webcamRatio.y, vertex[16][0]*webcamRatio.x, vertex[16][1]*webcamRatio.y);
-    //  Mouth loop #2:
-    line(vertex[17][0]*webcamRatio.x, vertex[17][1]*webcamRatio.y, vertex[405][0]*webcamRatio.x, vertex[405][1]*webcamRatio.y);
-    line(vertex[405][0]*webcamRatio.x, vertex[405][1]*webcamRatio.y, vertex[375][0]*webcamRatio.x, vertex[375][1]*webcamRatio.y);
-    line(vertex[375][0]*webcamRatio.x, vertex[375][1]*webcamRatio.y, vertex[291][0]*webcamRatio.x, vertex[291][1]*webcamRatio.y);
-    line(vertex[291][0]*webcamRatio.x, vertex[291][1]*webcamRatio.y, vertex[409][0]*webcamRatio.x, vertex[409][1]*webcamRatio.y);
-    line(vertex[409][0]*webcamRatio.x, vertex[409][1]*webcamRatio.y, vertex[269][0]*webcamRatio.x, vertex[269][1]*webcamRatio.y);
-    line(vertex[269][0]*webcamRatio.x, vertex[269][1]*webcamRatio.y, vertex[267][0]*webcamRatio.x, vertex[267][1]*webcamRatio.y);
-    line(vertex[267][0]*webcamRatio.x, vertex[267][1]*webcamRatio.y, vertex[0][0]*webcamRatio.x, vertex[0][1]*webcamRatio.y);
-    line(vertex[0][0]*webcamRatio.x, vertex[0][1]*webcamRatio.y, vertex[37][0]*webcamRatio.x, vertex[37][1]*webcamRatio.y);
-    line(vertex[37][0]*webcamRatio.x, vertex[37][1]*webcamRatio.y, vertex[39][0]*webcamRatio.x, vertex[39][1]*webcamRatio.y);
-    line(vertex[39][0]*webcamRatio.x, vertex[39][1]*webcamRatio.y, vertex[185][0]*webcamRatio.x, vertex[185][1]*webcamRatio.y);
-    line(vertex[185][0]*webcamRatio.x, vertex[185][1]*webcamRatio.y, vertex[61][0]*webcamRatio.x, vertex[61][1]*webcamRatio.y);
-    line(vertex[61][0]*webcamRatio.x, vertex[61][1]*webcamRatio.y, vertex[146][0]*webcamRatio.x, vertex[146][1]*webcamRatio.y);
-    line(vertex[146][0]*webcamRatio.x, vertex[146][1]*webcamRatio.y, vertex[181][0]*webcamRatio.x, vertex[181][1]*webcamRatio.y);
-    line(vertex[181][0]*webcamRatio.x, vertex[181][1]*webcamRatio.y, vertex[17][0]*webcamRatio.x, vertex[17][1]*webcamRatio.y);
-    //  Mouth loop #3:
-    line(vertex[287][0]*webcamRatio.x, vertex[287][1]*webcamRatio.y, vertex[410][0]*webcamRatio.x, vertex[410][1]*webcamRatio.y);
-    line(vertex[410][0]*webcamRatio.x, vertex[410][1]*webcamRatio.y, vertex[391][0]*webcamRatio.x, vertex[391][1]*webcamRatio.y);
-    line(vertex[391][0]*webcamRatio.x, vertex[391][1]*webcamRatio.y, vertex[164][0]*webcamRatio.x, vertex[164][1]*webcamRatio.y);
-    line(vertex[164][0]*webcamRatio.x, vertex[164][1]*webcamRatio.y, vertex[165][0]*webcamRatio.x, vertex[165][1]*webcamRatio.y);
-    line(vertex[165][0]*webcamRatio.x, vertex[165][1]*webcamRatio.y, vertex[186][0]*webcamRatio.x, vertex[186][1]*webcamRatio.y);
-    line(vertex[186][0]*webcamRatio.x, vertex[186][1]*webcamRatio.y, vertex[57][0]*webcamRatio.x, vertex[57][1]*webcamRatio.y);
-    //  Mouth loop #4:
-    line(vertex[434][0]*webcamRatio.x, vertex[434][1]*webcamRatio.y, vertex[427][0]*webcamRatio.x, vertex[427][1]*webcamRatio.y);
+/** Cheekbones: */
+function lowerEyelidMesh(v) {
+    stroke(255, 0, 0);
+    //  Y0:
+    line(v[195][0]*webcamRatio.x,   v[195][1]*webcamRatio.y,    v[6][0]*webcamRatio.x,      v[6][1]*webcamRatio.y);
+    //  Y1:
+    line(v[248][0]*webcamRatio.x,   v[248][1]*webcamRatio.y,    v[351][0]*webcamRatio.x,    v[351][1]*webcamRatio.y);
+    //  Y2:
+    line(v[420][0]*webcamRatio.x,   v[420][1]*webcamRatio.y,    v[343][0]*webcamRatio.x,    v[343][1]*webcamRatio.y);
+    //  Y3:
+    line(v[358][0]*webcamRatio.x,   v[358][1]*webcamRatio.y,    v[355][0]*webcamRatio.x,    v[355][1]*webcamRatio.y);
+    line(v[355][0]*webcamRatio.x,   v[355][1]*webcamRatio.y,    v[256][0]*webcamRatio.x,    v[256][1]*webcamRatio.y);
+    line(v[256][0]*webcamRatio.x,   v[256][1]*webcamRatio.y,    v[381][0]*webcamRatio.x,    v[381][1]*webcamRatio.y);
+    //  Y4:
+    line(v[266][0]*webcamRatio.x,   v[266][1]*webcamRatio.y,    v[348][0]*webcamRatio.x,    v[348][1]*webcamRatio.y);
+    line(v[348][0]*webcamRatio.x,   v[348][1]*webcamRatio.y,    v[253][0]*webcamRatio.x,    v[253][1]*webcamRatio.y);
+    line(v[253][0]*webcamRatio.x,   v[253][1]*webcamRatio.y,    v[374][0]*webcamRatio.x,    v[374][1]*webcamRatio.y);
+    //  Y5:
+    line(v[390][0]*webcamRatio.x,   v[390][1]*webcamRatio.y,    v[339][0]*webcamRatio.x,    v[339][1]*webcamRatio.y);
+    line(v[339][0]*webcamRatio.x,   v[339][1]*webcamRatio.y,    v[346][0]*webcamRatio.x,    v[346][1]*webcamRatio.y);
+    line(v[346][0]*webcamRatio.x,   v[346][1]*webcamRatio.y,    v[280][0]*webcamRatio.x,    v[280][1]*webcamRatio.y);
+    
+    line(v[346][0]*webcamRatio.x,   v[346][1]*webcamRatio.y,    v[265][0]*webcamRatio.x,    v[265][1]*webcamRatio.y);
+    //  Y6:
+    line(v[366][0]*webcamRatio.x,   v[366][1]*webcamRatio.y,    v[447][0]*webcamRatio.x,    v[447][1]*webcamRatio.y);
+    line(v[447][0]*webcamRatio.x,   v[447][1]*webcamRatio.y,    v[264][0]*webcamRatio.x,    v[264][1]*webcamRatio.y);
+
+
+    //  Y-1:
+    line(v[3][0]*webcamRatio.x,     v[3][1]*webcamRatio.y,      v[122][0]*webcamRatio.x,    v[122][1]*webcamRatio.y);
+    //  Y-2:
+    line(v[198][0]*webcamRatio.x,   v[198][1]*webcamRatio.y,    v[114][0]*webcamRatio.x,    v[114][1]*webcamRatio.y);
+    //  Y-3:
+    line(v[129][0]*webcamRatio.x,   v[129][1]*webcamRatio.y,    v[126][0]*webcamRatio.x,    v[126][1]*webcamRatio.y);
+    line(v[126][0]*webcamRatio.x,   v[126][1]*webcamRatio.y,    v[26][0]*webcamRatio.x,     v[26][1]*webcamRatio.y);
+    line(v[26][0]*webcamRatio.x,    v[26][1]*webcamRatio.y,     v[154][0]*webcamRatio.x,    v[154][1]*webcamRatio.y);
+    //  Y-4:
+    line(v[36][0]*webcamRatio.x,    v[36][1]*webcamRatio.y,     v[119][0]*webcamRatio.x,    v[119][1]*webcamRatio.y);
+    line(v[119][0]*webcamRatio.x,   v[119][1]*webcamRatio.y,    v[23][0]*webcamRatio.x,     v[23][1]*webcamRatio.y);
+    line(v[23][0]*webcamRatio.x,    v[23][1]*webcamRatio.y,     v[145][0]*webcamRatio.x,    v[145][1]*webcamRatio.y);
+    //  Y-5:
+    line(v[50][0]*webcamRatio.x,    v[50][1]*webcamRatio.y,     v[117][0]*webcamRatio.x,    v[117][1]*webcamRatio.y);
+    line(v[117][0]*webcamRatio.x,   v[117][1]*webcamRatio.y,    v[110][0]*webcamRatio.x,    v[110][1]*webcamRatio.y);
+    line(v[110][0]*webcamRatio.x,   v[110][1]*webcamRatio.y,    v[163][0]*webcamRatio.x,    v[163][1]*webcamRatio.y);
+    
+    line(v[117][0]*webcamRatio.x,   v[117][1]*webcamRatio.y,    v[35][0]*webcamRatio.x,     v[35][1]*webcamRatio.y);
+    //  Y-6:
+    line(v[137][0]*webcamRatio.x,   v[137][1]*webcamRatio.y,    v[227][0]*webcamRatio.x,    v[227][1]*webcamRatio.y);
+    line(v[227][0]*webcamRatio.x,   v[227][1]*webcamRatio.y,    v[34][0]*webcamRatio.x,     v[34][1]*webcamRatio.y);
+
+
+    //  X11:
+    line(v[234][0]*webcamRatio.x,   v[234][1]*webcamRatio.y,    v[227][0]*webcamRatio.x,    v[227][1]*webcamRatio.y);
+    line(v[227][0]*webcamRatio.x,   v[227][1]*webcamRatio.y,    v[117][0]*webcamRatio.x,    v[117][1]*webcamRatio.y);
+    line(v[117][0]*webcamRatio.x,   v[117][1]*webcamRatio.y,    v[119][0]*webcamRatio.x,    v[119][1]*webcamRatio.y);
+    line(v[119][0]*webcamRatio.x,   v[119][1]*webcamRatio.y,    v[126][0]*webcamRatio.x,    v[126][1]*webcamRatio.y);
+    line(v[126][0]*webcamRatio.x,   v[126][1]*webcamRatio.y,    v[198][0]*webcamRatio.x,    v[198][1]*webcamRatio.y);
+
+    line(v[420][0]*webcamRatio.x,   v[420][1]*webcamRatio.y,    v[355][0]*webcamRatio.x,    v[355][1]*webcamRatio.y);
+    line(v[355][0]*webcamRatio.x,   v[355][1]*webcamRatio.y,    v[348][0]*webcamRatio.x,    v[348][1]*webcamRatio.y);
+    line(v[348][0]*webcamRatio.x,   v[348][1]*webcamRatio.y,    v[346][0]*webcamRatio.x,    v[346][1]*webcamRatio.y);
+    line(v[346][0]*webcamRatio.x,   v[346][1]*webcamRatio.y,    v[447][0]*webcamRatio.x,    v[447][1]*webcamRatio.y);
+    line(v[447][0]*webcamRatio.x,   v[447][1]*webcamRatio.y,    v[454][0]*webcamRatio.x,    v[454][1]*webcamRatio.y);
+
+    //  X12:
+    line(v[26][0]*webcamRatio.x,    v[26][1]*webcamRatio.y,     v[114][0]*webcamRatio.x,    v[114][1]*webcamRatio.y);
+    line(v[114][0]*webcamRatio.x,   v[114][1]*webcamRatio.y,    v[122][0]*webcamRatio.x,    v[122][1]*webcamRatio.y);
+
+    line(v[351][0]*webcamRatio.x,   v[351][1]*webcamRatio.y,    v[343][0]*webcamRatio.x,    v[343][1]*webcamRatio.y);
+    line(v[343][0]*webcamRatio.x,   v[343][1]*webcamRatio.y,    v[256][0]*webcamRatio.x,    v[256][1]*webcamRatio.y);
+
+    //  X13:
+    line(v[130][0]*webcamRatio.x,   v[130][1]*webcamRatio.y,    v[110][0]*webcamRatio.x,    v[110][1]*webcamRatio.y);
+    line(v[110][0]*webcamRatio.x,   v[110][1]*webcamRatio.y,    v[23][0]*webcamRatio.x,     v[23][1]*webcamRatio.y);
+    line(v[23][0]*webcamRatio.x,    v[23][1]*webcamRatio.y,     v[26][0]*webcamRatio.x,     v[26][1]*webcamRatio.y);
+    line(v[26][0]*webcamRatio.x,    v[26][1]*webcamRatio.y,     v[244][0]*webcamRatio.x,    v[244][1]*webcamRatio.y);
+
+    line(v[464][0]*webcamRatio.x,   v[464][1]*webcamRatio.y,    v[256][0]*webcamRatio.x,    v[256][1]*webcamRatio.y);
+    line(v[256][0]*webcamRatio.x,   v[256][1]*webcamRatio.y,    v[253][0]*webcamRatio.x,    v[253][1]*webcamRatio.y);
+    line(v[253][0]*webcamRatio.x,   v[253][1]*webcamRatio.y,    v[339][0]*webcamRatio.x,    v[339][1]*webcamRatio.y);
+    line(v[339][0]*webcamRatio.x,   v[339][1]*webcamRatio.y,    v[359][0]*webcamRatio.x,    v[359][1]*webcamRatio.y);
+
+    //  X14:
+    line(v[127][0]*webcamRatio.x,   v[127][1]*webcamRatio.y,    v[34][0]*webcamRatio.x,     v[34][1]*webcamRatio.y);
+    line(v[34][0]*webcamRatio.x,    v[34][1]*webcamRatio.y,     v[35][0]*webcamRatio.x,     v[35][1]*webcamRatio.y);
+    line(v[35][0]*webcamRatio.x,    v[35][1]*webcamRatio.y,     v[130][0]*webcamRatio.x,    v[130][1]*webcamRatio.y);
+    line(v[130][0]*webcamRatio.x,   v[130][1]*webcamRatio.y,    v[33][0]*webcamRatio.x,     v[33][1]*webcamRatio.y);
+        //  Left Eye:
+    line(v[33][0]*webcamRatio.x,    v[33][1]*webcamRatio.y,     v[163][0]*webcamRatio.x,    v[163][1]*webcamRatio.y);
+    line(v[163][0]*webcamRatio.x,   v[163][1]*webcamRatio.y,    v[145][0]*webcamRatio.x,    v[145][1]*webcamRatio.y);
+    line(v[145][0]*webcamRatio.x,   v[145][1]*webcamRatio.y,    v[154][0]*webcamRatio.x,    v[154][1]*webcamRatio.y);
+    line(v[154][0]*webcamRatio.x,   v[154][1]*webcamRatio.y,    v[133][0]*webcamRatio.x,    v[133][1]*webcamRatio.y);
+
+    line(v[133][0]*webcamRatio.x,   v[133][1]*webcamRatio.y,    v[244][0]*webcamRatio.x,    v[244][1]*webcamRatio.y);
+    line(v[244][0]*webcamRatio.x,   v[244][1]*webcamRatio.y,    v[122][0]*webcamRatio.x,    v[122][1]*webcamRatio.y);
+    line(v[122][0]*webcamRatio.x,   v[122][1]*webcamRatio.y,    v[6][0]*webcamRatio.x,      v[6][1]*webcamRatio.y);
+    line(v[6][0]*webcamRatio.x,     v[6][1]*webcamRatio.y,      v[351][0]*webcamRatio.x,    v[351][1]*webcamRatio.y);
+    line(v[351][0]*webcamRatio.x,   v[351][1]*webcamRatio.y,    v[464][0]*webcamRatio.x,    v[464][1]*webcamRatio.y);
+    line(v[464][0]*webcamRatio.x,   v[464][1]*webcamRatio.y,    v[362][0]*webcamRatio.x,    v[362][1]*webcamRatio.y);
+        //  Right Eye:
+    line(v[362][0]*webcamRatio.x,   v[362][1]*webcamRatio.y,    v[381][0]*webcamRatio.x,    v[381][1]*webcamRatio.y);
+    line(v[381][0]*webcamRatio.x,   v[381][1]*webcamRatio.y,    v[374][0]*webcamRatio.x,    v[374][1]*webcamRatio.y);
+    line(v[374][0]*webcamRatio.x,   v[374][1]*webcamRatio.y,    v[390][0]*webcamRatio.x,    v[390][1]*webcamRatio.y);
+    line(v[390][0]*webcamRatio.x,   v[390][1]*webcamRatio.y,    v[263][0]*webcamRatio.x,    v[263][1]*webcamRatio.y);
+    
+    line(v[263][0]*webcamRatio.x,   v[263][1]*webcamRatio.y,    v[359][0]*webcamRatio.x,    v[359][1]*webcamRatio.y);
+    line(v[359][0]*webcamRatio.x,   v[359][1]*webcamRatio.y,    v[265][0]*webcamRatio.x,    v[265][1]*webcamRatio.y);
+    line(v[265][0]*webcamRatio.x,   v[265][1]*webcamRatio.y,    v[264][0]*webcamRatio.x,    v[264][1]*webcamRatio.y);
+    line(v[264][0]*webcamRatio.x,   v[264][1]*webcamRatio.y,    v[356][0]*webcamRatio.x,    v[356][1]*webcamRatio.y);
 }
-function contours(v)   {
-    //  Face:
-        //  Ring #1:
-    line(vertex[199][0]*webcamRatio.x, vertex[199][1]*webcamRatio.y, vertex[262][0]*webcamRatio.x, vertex[262][1]*webcamRatio.y);
-    line(vertex[262][0]*webcamRatio.x, vertex[262][1]*webcamRatio.y, vertex[430][0]*webcamRatio.x, vertex[430][1]*webcamRatio.y);
-    line(vertex[430][0]*webcamRatio.x, vertex[430][1]*webcamRatio.y, vertex[434][0]*webcamRatio.x, vertex[434][1]*webcamRatio.y);
-    line(vertex[434][0]*webcamRatio.x, vertex[434][1]*webcamRatio.y, vertex[433][0]*webcamRatio.x, vertex[433][1]*webcamRatio.y);
-    line(vertex[433][0]*webcamRatio.x, vertex[433][1]*webcamRatio.y, vertex[352][0]*webcamRatio.x, vertex[352][1]*webcamRatio.y);
-    line(vertex[352][0]*webcamRatio.x, vertex[352][1]*webcamRatio.y, vertex[372][0]*webcamRatio.x, vertex[372][1]*webcamRatio.y);
-    line(vertex[372][0]*webcamRatio.x, vertex[372][1]*webcamRatio.y, vertex[300][0]*webcamRatio.x, vertex[300][1]*webcamRatio.y);
-    line(vertex[300][0]*webcamRatio.x, vertex[300][1]*webcamRatio.y, vertex[334][0]*webcamRatio.x, vertex[334][1]*webcamRatio.y);
-    line(vertex[334][0]*webcamRatio.x, vertex[334][1]*webcamRatio.y, vertex[336][0]*webcamRatio.x, vertex[336][1]*webcamRatio.y);
-    line(vertex[336][0]*webcamRatio.x, vertex[336][1]*webcamRatio.y, vertex[9][0]*webcamRatio.x, vertex[9][1]*webcamRatio.y);
-    line(vertex[9][0]*webcamRatio.x, vertex[9][1]*webcamRatio.y, vertex[107][0]*webcamRatio.x, vertex[107][1]*webcamRatio.y);
-    line(vertex[107][0]*webcamRatio.x, vertex[107][1]*webcamRatio.y, vertex[105][0]*webcamRatio.x, vertex[105][1]*webcamRatio.y);
-    line(vertex[105][0]*webcamRatio.x, vertex[105][1]*webcamRatio.y, vertex[70][0]*webcamRatio.x, vertex[70][1]*webcamRatio.y);
-    line(vertex[70][0]*webcamRatio.x, vertex[70][1]*webcamRatio.y, vertex[143][0]*webcamRatio.x, vertex[143][1]*webcamRatio.y);
-    line(vertex[143][0]*webcamRatio.x, vertex[143][1]*webcamRatio.y, vertex[213][0]*webcamRatio.x, vertex[213][1]*webcamRatio.y);
-    line(vertex[213][0]*webcamRatio.x, vertex[213][1]*webcamRatio.y, vertex[214][0]*webcamRatio.x, vertex[214][1]*webcamRatio.y);
-    line(vertex[214][0]*webcamRatio.x, vertex[214][1]*webcamRatio.y, vertex[210][0]*webcamRatio.x, vertex[210][1]*webcamRatio.y);
-    line(vertex[210][0]*webcamRatio.x, vertex[210][1]*webcamRatio.y, vertex[32][0]*webcamRatio.x, vertex[32][1]*webcamRatio.y);
-    line(vertex[32][0]*webcamRatio.x, vertex[32][1]*webcamRatio.y, vertex[199][0]*webcamRatio.x, vertex[199][1]*webcamRatio.y);
-        //  Ring #2:
-    line(vertex[18][0]*webcamRatio.x, vertex[18][1]*webcamRatio.y, vertex[406][0]*webcamRatio.x, vertex[406][1]*webcamRatio.y);
-    line(vertex[406][0]*webcamRatio.x, vertex[406][1]*webcamRatio.y, vertex[273][0]*webcamRatio.x, vertex[273][1]*webcamRatio.y);
-    line(vertex[273][0]*webcamRatio.x, vertex[273][1]*webcamRatio.y, vertex[287][0]*webcamRatio.x, vertex[287][1]*webcamRatio.y);
+/** Forehead:   */
+function foreheadMesh(v)    {
+    stroke(100, 0, 255);
+    //  Y0:
+    // line(v[197][0]*webcamRatio.x,    v[197][1]*webcamRatio.y,     v[6][0]*webcamRatio.x,      v[6][1]*webcamRatio.y);
+    line(v[6][0]*webcamRatio.x,     v[6][1]*webcamRatio.y,      v[8][0]*webcamRatio.x,      v[8][1]*webcamRatio.y);
+    line(v[8][0]*webcamRatio.x,     v[8][1]*webcamRatio.y,      v[151][0]*webcamRatio.x,    v[151][1]*webcamRatio.y);
+    line(v[151][0]*webcamRatio.x,   v[151][1]*webcamRatio.y,    v[10][0]*webcamRatio.x,     v[10][1]*webcamRatio.y);
+    //  Y1:
+    line(v[351][0]*webcamRatio.x,   v[351][1]*webcamRatio.y,    v[285][0]*webcamRatio.x,    v[285][1]*webcamRatio.y);
+    line(v[285][0]*webcamRatio.x,   v[285][1]*webcamRatio.y,    v[337][0]*webcamRatio.x,    v[337][1]*webcamRatio.y);
+    line(v[337][0]*webcamRatio.x,   v[337][1]*webcamRatio.y,    v[338][0]*webcamRatio.x,    v[338][1]*webcamRatio.y);
+    //  Y2:
+    line(v[386][0]*webcamRatio.x,   v[386][1]*webcamRatio.y,    v[257][0]*webcamRatio.x,    v[257][1]*webcamRatio.y);
+    line(v[257][0]*webcamRatio.x,   v[257][1]*webcamRatio.y,    v[282][0]*webcamRatio.x,    v[282][1]*webcamRatio.y);
+    line(v[282][0]*webcamRatio.x,   v[282][1]*webcamRatio.y,    v[333][0]*webcamRatio.x,    v[333][1]*webcamRatio.y);
+    line(v[333][0]*webcamRatio.x,   v[333][1]*webcamRatio.y,    v[332][0]*webcamRatio.x,    v[332][1]*webcamRatio.y);
+    //  Y3:
+    line(v[388][0]*webcamRatio.x,   v[388][1]*webcamRatio.y,    v[260][0]*webcamRatio.x,    v[260][1]*webcamRatio.y);
+    line(v[260][0]*webcamRatio.x,   v[260][1]*webcamRatio.y,    v[276][0]*webcamRatio.x,    v[276][1]*webcamRatio.y);
+    line(v[276][0]*webcamRatio.x,   v[276][1]*webcamRatio.y,    v[301][0]*webcamRatio.x,    v[301][1]*webcamRatio.y);
+    line(v[301][0]*webcamRatio.x,   v[301][1]*webcamRatio.y,    v[251][0]*webcamRatio.x,    v[251][1]*webcamRatio.y);
+    //  Y-1:
+    line(v[122][0]*webcamRatio.x,   v[122][1]*webcamRatio.y,    v[55][0]*webcamRatio.x,     v[55][1]*webcamRatio.y);
+    line(v[55][0]*webcamRatio.x,    v[55][1]*webcamRatio.y,     v[108][0]*webcamRatio.x,    v[108][1]*webcamRatio.y);
+    line(v[108][0]*webcamRatio.x,   v[108][1]*webcamRatio.y,    v[109][0]*webcamRatio.x,    v[109][1]*webcamRatio.y);
+    //  Y-2:
+    line(v[159][0]*webcamRatio.x,   v[159][1]*webcamRatio.y,    v[27][0]*webcamRatio.x,     v[27][1]*webcamRatio.y);
+    line(v[27][0]*webcamRatio.x,    v[27][1]*webcamRatio.y,     v[52][0]*webcamRatio.x,     v[52][1]*webcamRatio.y);
+    line(v[52][0]*webcamRatio.x,    v[52][1]*webcamRatio.y,     v[104][0]*webcamRatio.x,    v[104][1]*webcamRatio.y);
+    line(v[104][0]*webcamRatio.x,   v[104][1]*webcamRatio.y,    v[103][0]*webcamRatio.x,    v[103][1]*webcamRatio.y);
+    //  Y-3:
+    line(v[161][0]*webcamRatio.x,   v[161][1]*webcamRatio.y,    v[30][0]*webcamRatio.x,     v[30][1]*webcamRatio.y);
+    line(v[30][0]*webcamRatio.x,    v[30][1]*webcamRatio.y,     v[46][0]*webcamRatio.x,     v[46][1]*webcamRatio.y);
+    line(v[46][0]*webcamRatio.x,    v[46][1]*webcamRatio.y,     v[71][0]*webcamRatio.x,     v[71][1]*webcamRatio.y);
+    line(v[71][0]*webcamRatio.x,    v[71][1]*webcamRatio.y,     v[21][0]*webcamRatio.x,     v[21][1]*webcamRatio.y);
+    
+    //  X_:
+    line(v[130][0]*webcamRatio.x,   v[130][1]*webcamRatio.y,    v[30][0]*webcamRatio.x,     v[30][1]*webcamRatio.y);
+    line(v[30][0]*webcamRatio.x,    v[30][1]*webcamRatio.y,     v[27][0]*webcamRatio.x,     v[27][1]*webcamRatio.y);
+    line(v[27][0]*webcamRatio.x,    v[27][1]*webcamRatio.y,     v[56][0]*webcamRatio.x,     v[56][1]*webcamRatio.y);
+    line(v[56][0]*webcamRatio.x,    v[56][1]*webcamRatio.y,     v[244][0]*webcamRatio.x,    v[244][1]*webcamRatio.y);
 
-    line(vertex[57][0]*webcamRatio.x, vertex[57][1]*webcamRatio.y, vertex[43][0]*webcamRatio.x, vertex[43][1]*webcamRatio.y);
-    line(vertex[43][0]*webcamRatio.x, vertex[43][1]*webcamRatio.y, vertex[182][0]*webcamRatio.x, vertex[182][1]*webcamRatio.y);
-    line(vertex[182][0]*webcamRatio.x, vertex[182][1]*webcamRatio.y, vertex[18][0]*webcamRatio.x, vertex[18][1]*webcamRatio.y);
-    //  Mouth Contour:
-    //  Right:
-    line(vertex[14][0]*webcamRatio.x, vertex[14][1]*webcamRatio.y, vertex[402][0]*webcamRatio.x, vertex[402][1]*webcamRatio.y);
-    line(vertex[402][0]*webcamRatio.x, vertex[402][1]*webcamRatio.y, vertex[324][0]*webcamRatio.x, vertex[324][1]*webcamRatio.y);
-    line(vertex[324][0]*webcamRatio.x, vertex[324][1]*webcamRatio.y, vertex[308][0]*webcamRatio.x, vertex[308][1]*webcamRatio.y);
-    line(vertex[308][0]*webcamRatio.x, vertex[308][1]*webcamRatio.y, vertex[415][0]*webcamRatio.x, vertex[415][1]*webcamRatio.y);
-    line(vertex[415][0]*webcamRatio.x, vertex[415][1]*webcamRatio.y, vertex[311][0]*webcamRatio.x, vertex[311][1]*webcamRatio.y);
-    line(vertex[311][0]*webcamRatio.x, vertex[311][1]*webcamRatio.y, vertex[13][0]*webcamRatio.x, vertex[13][1]*webcamRatio.y);
-    //  Left:
-    line(vertex[14][0]*webcamRatio.x, vertex[14][1]*webcamRatio.y, vertex[178][0]*webcamRatio.x, vertex[178][1]*webcamRatio.y);
-    line(vertex[178][0]*webcamRatio.x, vertex[178][1]*webcamRatio.y, vertex[95][0]*webcamRatio.x, vertex[95][1]*webcamRatio.y);
-    line(vertex[95][0]*webcamRatio.x, vertex[95][1]*webcamRatio.y, vertex[78][0]*webcamRatio.x, vertex[78][1]*webcamRatio.y);
-    line(vertex[78][0]*webcamRatio.x, vertex[78][1]*webcamRatio.y, vertex[191][0]*webcamRatio.x, vertex[191][1]*webcamRatio.y);
-    line(vertex[191][0]*webcamRatio.x, vertex[191][1]*webcamRatio.y, vertex[81][0]*webcamRatio.x, vertex[81][1]*webcamRatio.y);
-    line(vertex[81][0]*webcamRatio.x, vertex[81][1]*webcamRatio.y, vertex[13][0]*webcamRatio.x, vertex[13][1]*webcamRatio.y);
+    line(v[464][0]*webcamRatio.x,   v[464][1]*webcamRatio.y,    v[286][0]*webcamRatio.x,    v[286][1]*webcamRatio.y);
+    line(v[286][0]*webcamRatio.x,   v[286][1]*webcamRatio.y,    v[257][0]*webcamRatio.x,    v[257][1]*webcamRatio.y);
+    line(v[257][0]*webcamRatio.x,   v[257][1]*webcamRatio.y,    v[260][0]*webcamRatio.x,    v[260][1]*webcamRatio.y);
+    line(v[260][0]*webcamRatio.x,   v[260][1]*webcamRatio.y,    v[359][0]*webcamRatio.x,    v[359][1]*webcamRatio.y);
+    //  X_+1:
+    line(v[33][0]*webcamRatio.x,    v[33][1]*webcamRatio.y,     v[161][0]*webcamRatio.x,    v[161][1]*webcamRatio.y);
+    line(v[161][0]*webcamRatio.x,   v[161][1]*webcamRatio.y,    v[159][0]*webcamRatio.x,    v[159][1]*webcamRatio.y);
+    line(v[159][0]*webcamRatio.x,   v[159][1]*webcamRatio.y,    v[157][0]*webcamRatio.x,    v[157][1]*webcamRatio.y);
+    line(v[157][0]*webcamRatio.x,   v[157][1]*webcamRatio.y,    v[133][0]*webcamRatio.x,    v[133][1]*webcamRatio.y);
+    
+    line(v[362][0]*webcamRatio.x,   v[362][1]*webcamRatio.y,    v[384][0]*webcamRatio.x,    v[384][1]*webcamRatio.y);
+    line(v[384][0]*webcamRatio.x,   v[384][1]*webcamRatio.y,    v[386][0]*webcamRatio.x,    v[386][1]*webcamRatio.y);
+    line(v[386][0]*webcamRatio.x,   v[386][1]*webcamRatio.y,    v[388][0]*webcamRatio.x,    v[388][1]*webcamRatio.y);
+    line(v[388][0]*webcamRatio.x,   v[388][1]*webcamRatio.y,    v[263][0]*webcamRatio.x,    v[263][1]*webcamRatio.y);
+    //  X_+2:
+    line(v[157][0]*webcamRatio.x,   v[157][1]*webcamRatio.y,    v[56][0]*webcamRatio.x,     v[56][1]*webcamRatio.y);
+    line(v[56][0]*webcamRatio.x,    v[56][1]*webcamRatio.y,     v[55][0]*webcamRatio.x,     v[55][1]*webcamRatio.y);
+    line(v[55][0]*webcamRatio.x,    v[55][1]*webcamRatio.y,     v[8][0]*webcamRatio.x,      v[8][1]*webcamRatio.y);
+    line(v[8][0]*webcamRatio.x,     v[8][1]*webcamRatio.y,      v[285][0]*webcamRatio.x,    v[285][1]*webcamRatio.y);
+    line(v[285][0]*webcamRatio.x,   v[285][1]*webcamRatio.y,    v[286][0]*webcamRatio.x,    v[286][1]*webcamRatio.y);
+    line(v[286][0]*webcamRatio.x,   v[286][1]*webcamRatio.y,    v[384][0]*webcamRatio.x,    v[384][1]*webcamRatio.y);
+    //  X_+3:
+    line(v[35][0]*webcamRatio.x,    v[35][1]*webcamRatio.y,     v[46][0]*webcamRatio.x,     v[46][1]*webcamRatio.y);
+    line(v[46][0]*webcamRatio.x,    v[46][1]*webcamRatio.y,     v[52][0]*webcamRatio.x,     v[52][1]*webcamRatio.y);
+    line(v[52][0]*webcamRatio.x,    v[52][1]*webcamRatio.y,     v[55][0]*webcamRatio.x,     v[55][1]*webcamRatio.y);
 
-    //Right Eye:
-
-    //Left Eye:
+    line(v[285][0]*webcamRatio.x,   v[285][1]*webcamRatio.y,    v[282][0]*webcamRatio.x,    v[282][1]*webcamRatio.y);
+    line(v[282][0]*webcamRatio.x,   v[282][1]*webcamRatio.y,    v[276][0]*webcamRatio.x,    v[276][1]*webcamRatio.y);
+    line(v[276][0]*webcamRatio.x,   v[276][1]*webcamRatio.y,    v[265][0]*webcamRatio.x,    v[265][1]*webcamRatio.y);
+    //  X_+4:
+    line(v[34][0]*webcamRatio.x,    v[34][1]*webcamRatio.y,     v[71][0]*webcamRatio.x,     v[71][1]*webcamRatio.y);
+    line(v[71][0]*webcamRatio.x,    v[71][1]*webcamRatio.y,     v[104][0]*webcamRatio.x,    v[104][1]*webcamRatio.y);
+    line(v[104][0]*webcamRatio.x,   v[104][1]*webcamRatio.y,    v[108][0]*webcamRatio.x,    v[108][1]*webcamRatio.y);
+    line(v[108][0]*webcamRatio.x,   v[108][1]*webcamRatio.y,    v[151][0]*webcamRatio.x,    v[151][1]*webcamRatio.y);
+    line(v[151][0]*webcamRatio.x,   v[151][1]*webcamRatio.y,    v[337][0]*webcamRatio.x,    v[337][1]*webcamRatio.y);
+    line(v[337][0]*webcamRatio.x,   v[337][1]*webcamRatio.y,    v[333][0]*webcamRatio.x,    v[333][1]*webcamRatio.y);
+    line(v[333][0]*webcamRatio.x,   v[333][1]*webcamRatio.y,    v[301][0]*webcamRatio.x,    v[301][1]*webcamRatio.y);
+    line(v[301][0]*webcamRatio.x,   v[301][1]*webcamRatio.y,    v[264][0]*webcamRatio.x,    v[264][1]*webcamRatio.y);
 }
-
