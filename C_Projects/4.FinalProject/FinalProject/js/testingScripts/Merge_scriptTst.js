@@ -131,7 +131,7 @@ function running()  {
 
 
             // verticeNB(vertexX, vertexY, j);
-            displayDots(vertexX, vertexY, j, vertex);
+            // displayDots(vertexX, vertexY, j, vertex);
         }
     }
 
