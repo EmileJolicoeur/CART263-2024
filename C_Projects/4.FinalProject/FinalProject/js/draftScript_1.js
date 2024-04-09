@@ -101,13 +101,7 @@ let acronym =           undefined;
 let selectedName    =   undefined;
 
 
-//  Question select values:
-let askedQuery      =   `[Q]`;
-let answeredQuery   =   `[R]`;
-let unaskedQuery    =   `[-]`;
-let choices =           [1, 2, 3];
-let usedQ   =           [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
-let questionVisual  =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
+
 
 
 //______________________________________________________//
@@ -206,6 +200,13 @@ let negIndex            =   `Nan`;
 let posIndex            =   `Nan`;
 let outputType          =   `Neutral`;
 
+//  Question select values:
+let askedQuery      =   `[Q]`;
+let answeredQuery   =   `[R]`;
+let unaskedQuery    =   `[-]`;
+let choices =           [1, 2, 3];
+let questionVisual  =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
+
 /** AI: */
 function aiOutput() {
     recognition.stop();
@@ -220,6 +221,7 @@ function aiOutput() {
 
     //  Start: 
     if (ai.data.posInput === 0 && ai.data.negInput === 0)   {
+        previousQuestion    =   ai.data.lines[0].start;
         currentOutput       =   ai.data.lines[0].start;
         questionVisual[0]   =   unaskedQuery;
 
@@ -271,12 +273,14 @@ function aiOutput() {
             else    {
                 //  Selecting the comment:
                 let previousQueryIndex  =   ai.data.lines[0].question.indexOf(newQuestion) + 1;
-                console.log(`<><>`, previousQueryIndex);
+                console.log(`<>`, previousQueryIndex, `<>`);
                 beforeQuestion =   cSelect(previousQuestion, ai.data.posInput - 1);
                 // beforeQuestion =   cSelect(previousQuestion, ai.data.lines[0].question.indexOf(newQuestion)-1);
                 //  Selecting question:
                 newQuestion =   qSelect(ai.data.posInput);
                 posIndex   =   ai.data.lines[0].comment.indexOf(ai.data.posInput);
+
+                console.log(posIndex);
 
                 //  Assembling the voice line:
                 currentOutput   =   `\n` + beforeQuestion + `\n` + newQuestion;
@@ -320,40 +324,37 @@ function aiOutput() {
 
 /** Selecting Question: */
 function qSelect(userData)  {
-    let question    =   undefined;
-    let questionIndex   =   userData - 1;
-    let reRolls =   `X`;
-    let r   =   undefined;
+    let question    =   undefined;      //Question selected
+    let questionIndex   =   undefined;  //Array of ai.data.lines[0].question
+    let reRolls =   `X`;                //Amount of times question was randomized
+    let r   =   false;                  //If question is random
 
     console.log(userData);
 
-
     if (userData > 1 && userData <= 4)  {
-        console.log(`Choosing Q`);
-        r   =   `Y`;
+        r   =   true;
         reRolls =   0;
 
         //  Randomizing the order of questions:     [1, 2, 3]
         questionIndex   =   random(choices);
-        console.log(`qIndex:` )
-        question    =   ai.data.lines[0].question[questionIndex];
 
-        while (/*(questionIndex > 0 && questionIndex < 4) &&*/ questionVisual[questionIndex] === `[R]`) {
+        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex + 1] === `[R]`) {
             questionIndex   =   random(choices);
             reRolls++;
-            question    =   ai.data.lines[0].question[questionIndex];
 
             console.log(
                 questionVisual,
                 `\nIndex:   `, questionIndex
             );
         }
+        question    =   ai.data.lines[0].question[questionIndex];
+
         questionVisual[questionIndex + 1]    =   askedQuery;
 
     }
     else    {
+        questionIndex   =   userData - 1;
         if (userData === 1 || userData > 4) {
-            r   =   `N`;
             question    =   ai.data.lines[0].question[questionIndex];
             questionVisual[questionIndex + 1]    =    askedQuery;
         }
@@ -375,10 +376,10 @@ function qSelect(userData)  {
 }
 /** Selecting comment:  */
 function cSelect(query, queryPos)   {
-    console.log(
-        `   >   Comment Selection:____________________`,
-        `\n     >   `, 
-    );
+    // console.log(
+    //     `   >   Comment Selection:____________________`,
+    //     `\n     >   `, 
+    // );
     //  Previous Question + it's position in ai.data.lines[0].comment:
     console.log(query, queryPos);
     let selection   =   ai.data.lines[0].comment[queryPos];
@@ -639,7 +640,7 @@ function keyPressed()   {
     if (event.keyCode === 32)   {
         console.log(`input received: _`);
     }
-    //  Positive response:  [+ Key]
+    //  Positive response:  [ "+" Key]
     else if (event.keyCode === 187) {
         let reply   =   undefined;
         
@@ -681,7 +682,7 @@ function keyPressed()   {
             user
         );
     }
-    //  Negative response:  [-Key]
+    //  Negative response:  [ "-" Key]
     else if (event.keyCode === 189) {
         ai.data.negInput++;
         console.log(`input received: -`);
