@@ -177,6 +177,9 @@ function draw() {
 
 /** Displaying backlog: */
 function backlog()  {
+    
+    textFont(`JetBrains Mono`);
+    
     push();
     fill(0, 200, 0);
     textSize(26);

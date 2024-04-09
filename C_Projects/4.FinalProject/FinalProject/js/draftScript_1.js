@@ -171,6 +171,9 @@ function draw() {
 /** Displaying Text:    */
     /** Displaying the backlog: */
 function backlog()  {
+
+    textFont(`JetBrains Mono`);
+
     push();
     fill(0, 200, 0);
     textSize(26);
@@ -326,14 +329,16 @@ function qSelect(userData)  {
 
 
     if (userData > 1 && userData <= 4)  {
+        console.log(`Choosing Q`);
         r   =   `Y`;
         reRolls =   0;
 
         //  Randomizing the order of questions:     [1, 2, 3]
         questionIndex   =   random(choices);
+        console.log(`qIndex:` )
         question    =   ai.data.lines[0].question[questionIndex];
 
-        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[R]`) {
+        while (/*(questionIndex > 0 && questionIndex < 4) &&*/ questionVisual[questionIndex] === `[R]`) {
             questionIndex   =   random(choices);
             reRolls++;
             question    =   ai.data.lines[0].question[questionIndex];
@@ -466,7 +471,7 @@ function callingCommands(input, sentence)   {
     if (recognition.resultValue)    {
         //  Convert it to lowercase and add it to the Log:
         currentInput    =   recognition.resultString.toLowerCase();
-        console.log(currentInput);
+        // console.log(currentInput);
     }
     else    {
         return;

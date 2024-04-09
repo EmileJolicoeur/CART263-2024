@@ -24,6 +24,9 @@ const STATE =   {
 }
 let state   =   STATE.START;
 
+//  Triggers:
+let camera  =   false;
+
 //__Setup:______________________________________//
 
 
@@ -111,9 +114,12 @@ If there is a hand it outlines it and highlights the tip of the index finger
 function running()  {
     background(0);
     // Display the webcam with reveresd image so it's a mirror
-    // let flippedVid    =   ml5.flipImage(vid);
-    // image(flippedVid, 0, 0, width, height);
-    // image(vid, 0, 0, width, height);
+    let flippedVid    =   ml5.flipImage(vid);
+
+    if (camera) {
+        image(flippedVid, 0, 0, width, height);
+        image(vid, 0, 0, width, height);
+    }
 
 
     for (let i = 0; i < results.length; i ++)   {
@@ -139,22 +145,22 @@ function running()  {
 }
 function displayDots(x, y, nb, vertex)    {
     push();
-    // if (vertex[nb] === vertex[195])  {
-    //     fill(255, 0, 0);
-    //     ellipse(x, y, 10, 10);
-    // }
-    // else if (vertex[nb] === vertex[152] || vertex[nb] === vertex[14]) {
-    //     fill(100, 0, 100);
-    //     ellipse(x, y, 10, 10);
-    // }
-    // else if (vertex[nb] === vertex[13] || vertex[nb] === vertex[2] || vertex[nb] === vertex[1] || vertex[nb] === vertex[5] || vertex[nb] === vertex[168]) {
-    //     fill(200, 0, 200);
-    //     ellipse(x, y, 10, 10);
-    // }
-    // else    {
+    if (vertex[nb] === vertex[195])  {
+        fill(255, 0, 0);
+        ellipse(x, y, 10, 10);
+    }
+    else if (vertex[nb] === vertex[152] || vertex[nb] === vertex[14]) {
+        fill(100, 0, 100);
+        ellipse(x, y, 10, 10);
+    }
+    else if (vertex[nb] === vertex[13] || vertex[nb] === vertex[2] || vertex[nb] === vertex[1] || vertex[nb] === vertex[5] || vertex[nb] === vertex[168]) {
+        fill(200, 0, 200);
+        ellipse(x, y, 10, 10);
+    }
+    else    {
         fill(0, 255, 0);
         ellipse(x, y, 3, 3);
-    // }
+    }
     pop();
 }
 function verticeNB(x, y, nb)    {
@@ -640,4 +646,12 @@ function foreheadMesh(v)    {
     line(v[337][0]*webcamRatio.x,   v[337][1]*webcamRatio.y,    v[333][0]*webcamRatio.x,    v[333][1]*webcamRatio.y);
     line(v[333][0]*webcamRatio.x,   v[333][1]*webcamRatio.y,    v[301][0]*webcamRatio.x,    v[301][1]*webcamRatio.y);
     line(v[301][0]*webcamRatio.x,   v[301][1]*webcamRatio.y,    v[264][0]*webcamRatio.x,    v[264][1]*webcamRatio.y);
+}
+
+
+function keyPressed()   {
+    if (event.keyCode === 32)   {
+        camera  =   !camera;
+        console.log(camera);
+    }
 }
