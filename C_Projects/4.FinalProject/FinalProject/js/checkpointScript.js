@@ -8,7 +8,7 @@ author, and this description to match your project!
 
 "use strict"
 //  SFX:
-let barkSFX =           undefined;
+let barkSFX         =   undefined;
 
 //  Input values:
 const recognition   =   new p5.SpeechRec();
@@ -87,17 +87,17 @@ const submitComm    =   [
 ];
 
 //  JSON files  [Preload]:
-let countryData =       undefined;
-let devicesData =       undefined;
-let langData    =       undefined;
+let countryData     =   undefined;
+let devicesData     =   undefined;
+let langData        =   undefined;
 let relationsData   =   undefined;
     //  AI's parameters:
-let ai  =               undefined;
+let ai              =   undefined;
 
 //  Elements to set up  [Setup]:
 let selectedDevice  =   undefined;
 let selectedFamily  =   undefined;
-let acronym =           undefined;
+let acronym         =   undefined;
 let selectedName    =   undefined;
 
 
@@ -110,13 +110,13 @@ let selectedName    =   undefined;
 /** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    countryData =   loadJSON(`assets/data/nationalities_List.json`);
-    devicesData =   loadJSON(`assets/data/devices_List.json`);
-    langData  =   loadJSON(`assets/data/languages_List.json`);
-    relationsData  =   loadJSON(`assets/data/family_List.json`);
+    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
+    devicesData     =   loadJSON(`assets/data/devices_List.json`);
+    langData        =   loadJSON(`assets/data/languages_List.json`);
+    relationsData   =   loadJSON(`assets/data/family_List.json`);
 
     //  Loading AI Data:
-    ai  =   loadJSON(`assets/data/ai_data.json`);
+    ai              =   loadJSON(`assets/data/ai_data.json`);
 
     console.log(
         `<_Preload:\t[Completed]\t_>`,
@@ -131,7 +131,7 @@ function setup()    {
     //  Selecting the smart home device to 
     selectedDevice  =   random(devicesData.list);
     selectedFamily  =   random(relationsData.relatives);
-    acronym =   random(ai.data.names[0].acronyms);
+    acronym         =   random(ai.data.names[0].acronyms);
     selectedName    =   ai.data.names[0].meanings[(ai.data.names[0].acronyms.indexOf(acronym))];
 
     //  Debug:
@@ -165,7 +165,7 @@ function draw() {
 /** Displaying Text:    */
     /** Displaying the backlog: */
 function backlog()  {
-
+    //  Selecting font for text:
     textFont(`JetBrains Mono`);
 
     push();
@@ -187,7 +187,7 @@ function inputLine()    {
     textSize(32);
     textWrap(WORD);
     textAlign(LEFT, BOTTOM);
-    text(`  > ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
+    text(`\t> ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
     pop();
 }
 
@@ -201,11 +201,11 @@ let posIndex            =   `Nan`;
 let outputType          =   `Neutral`;
 
 //  Question select values:
-let askedQuery      =   `[Q]`;
-let answeredQuery   =   `[R]`;
-let unaskedQuery    =   `[-]`;
-let choices =           [1, 2, 3];
-let questionVisual  =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
+let unaskedQuery        =   `[-]`;
+let askedQuery          =   `[Q]`;
+let answeredQuery       =   `[R]`;
+let choices             =   [1, 2, 3];
+let questionVisual      =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
 
 /** AI: */
 function aiOutput() {
@@ -215,8 +215,8 @@ function aiOutput() {
     let selectedLanguage    =   random(langData.list);
 
     //  Output elements:
-    let newQuestion     =   undefined;
-    let beforeQuestion  =   undefined;
+    let newQuestion         =   undefined;
+    let beforeQuestion      =   undefined;
 
 
     //  Start: 
@@ -271,13 +271,13 @@ function aiOutput() {
             }
             //  AI gathering info:
             else    {
-                //  Selecting the comment:
-                let previousQueryIndex  =   ai.data.lines[0].question.indexOf(newQuestion) + 1;
-                console.log(`<>`, previousQueryIndex, `<>`);
-                beforeQuestion =   cSelect(previousQuestion, ai.data.posInput - 1);
-                // beforeQuestion =   cSelect(previousQuestion, ai.data.lines[0].question.indexOf(newQuestion)-1);
                 //  Selecting question:
                 newQuestion =   qSelect(ai.data.posInput);
+                //  Selecting the comment:
+                let previousQueryIndex  =   ai.data.lines[0].question.indexOf(newQuestion);
+                console.log(`<>`, previousQueryIndex, (ai.data.PosInput - 1), `<>`);
+                beforeQuestion =   cSelect(previousQuestion, ai.data.posInput - 1);
+                // beforeQuestion =   cSelect(previousQuestion, ai.data.lines[0].question.indexOf(newQuestion)-1);
                 posIndex   =   ai.data.lines[0].comment.indexOf(ai.data.posInput);
 
                 console.log(posIndex);
@@ -338,7 +338,7 @@ function qSelect(userData)  {
         //  Randomizing the order of questions:     [1, 2, 3]
         questionIndex   =   random(choices);
 
-        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex + 1] === `[R]`) {
+        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex + 1] === answeredQuery) {
             questionIndex   =   random(choices);
             reRolls++;
 
@@ -376,12 +376,8 @@ function qSelect(userData)  {
 }
 /** Selecting comment:  */
 function cSelect(query, queryPos)   {
-    // console.log(
-    //     `   >   Comment Selection:____________________`,
-    //     `\n     >   `, 
-    // );
-    //  Previous Question + it's position in ai.data.lines[0].comment:
-    console.log(query, queryPos);
+    console.log(`cSelect:\t`, query, queryPos);
+
     let selection   =   ai.data.lines[0].comment[queryPos];
     //  Final value:
     let c   =   linesEdit(selection, `{1}`, `{2}`, `{3}`)

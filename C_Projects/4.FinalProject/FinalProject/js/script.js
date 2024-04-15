@@ -1,21 +1,19 @@
 //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+//______________________________________________________//
 
 /**
-Title of Project
-Author Name
+"Spilled Information"
+by Emile Jolicoeur
 
-This is a template. You must fill in the title,
-author, and this description to match your project!
+
+Special Thanks to:
+- Pippin Barr
 */
 
-"use strict";
+"use strict"
 
 
-//__Variable Initialization:____________________________//
-
-
-//  SFX:
-let barkSFX =           undefined;
+//__Variables:  ________________________________________//
 
 //  Input values:
 const recognition   =   new p5.SpeechRec();
@@ -25,14 +23,14 @@ let currentInput    =   ``;
 const voice =           new p5.Speech();
 let currentOutput   =   ``;
 
-//  Display:
+/*  [Draw]  Display:    */
 //  Blinking values:
 let blinkIntensity  =   100;
 let blink   =           setInterval(inputLine, 500);
 //  Chat Log:
 let interactions    =   [];
 
-//  User information gathered from the AI   [Lines: 514-610]:
+//  [Data_Collection]   User information gathered from the AI:
 let user    =   {
     name:               undefined,  //DialogueResponse[1]
     age:                undefined,  //DialogueResponse[2]
@@ -41,7 +39,7 @@ let user    =   {
     address:            undefined,  //DialogueResponse[5]
 };
 
-//  User voice triggers [SubmitAns]:
+//  [submitAns] User voice triggers:
 const commands  =   [
     //  Commands from which the ai gathers information:
     {
@@ -85,7 +83,7 @@ const commands  =   [
         "callback": getResidency
     },
 ];
-//  Commands List   [HandleSpeechInput]:
+//  [User]  Commands List:
 const submitComm    =   [
     {
         "command":  /(.*) submit input/,
@@ -93,75 +91,127 @@ const submitComm    =   [
     }
 ];
 
-//  JSON files  [Preload]:
-let countryData =       undefined;
-let devicesData =       undefined;
-let langData    =       undefined;
-let relationsData   =   undefined;
-    //  AI's parameters:
-let ai  =               undefined;
+/*  JSON:   */
+//  [Setup] Data files:
+let data    =   {
+    country:    undefined,
+    devices:    undefined,
+    language:   undefined,
+    relations:  undefined,
+};
+//  [AI]    AI's parameters:
+let ai              =   undefined;
 
-//  Elements to set up  [Setup]:
+//  [Setup] Selected elements from data:
 let selectedDevice  =   undefined;
 let selectedFamily  =   undefined;
-let acronym =           undefined;
+let acronym         =   undefined;
 let selectedName    =   undefined;
 
+/** Question variables from AI's previous dialogue: */
+let previousQuestion    =   `Nan`;
+//  Debugging:
+let negIndex            =   `Nan`;
+let posIndex            =   `Nan`;
+let outputType          =   `Neutral`;
+
+
+
+
+/*  Debugging:  */
+//  SFX:
+let barkSFX             =   undefined;
 
 //  Question select values:
-let askedQuery      =   `[Q]`;
-let answeredQuery   =   `[R]`;
-let unaskedQuery    =   `[-]`;
-let choices =           [1, 2, 3];
-let usedQ   =           [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
-let questionVisual  =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
+let unaskedQuery        =   `[-]`;
+let askedQuery          =   `[Q]`;
+let answeredQuery       =   `[R]`;
+let choices             =   [1, 2, 3];
+let questionVisual      =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
+
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+/*  Face Tracking:  */
+//  [Draw]  States:
+const STATE =   {
+    START:  `START`,
+    MIMICKING:  `MIMICKING`
+};
+
+//  Face obj:
+let aiFace;
 
 
-//__Basic Functions:____________________________________//
+//__Preload:____________________________________________//
 
-
-/** Called Before Start:    */
+/** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
-    devicesData     =   loadJSON(`assets/data/devices_list.json`);
-    langData        =   loadJSON(`assets/data/languages_list.json`);
-    relationsData   =   loadJSON(`assets/data/family_list.json`);
+    data.country    =   loadJSON(`assets/data/nationalities_List.json`);
+    data.devices    =   loadJSON(`assets/data/devices_List.json`);
+    data.language   =   loadJSON(`assets/data/languages_List.json`);
+    data.relations  =   loadJSON(`assets/data/family_List.json`);
 
     //  Loading AI Data:
     ai              =   loadJSON(`assets/data/ai_data.json`);
 
     console.log(
-        `Preload:\t____[Completed]`,
-        `\n\t- Data_Loaded`,
+        `<_Preload:\t[Completed]\t_>`,
+        `\n\t> Data_Loaded`
     )
 }
-/** Called On Start:    */
+
+
+//__Setup:  ____________________________________________//
+
+/** Called Once:    */
 function setup()    {
     //  Creating the canvas:
     createCanvas(windowHeight, windowHeight);
 
     //  Selecting the smart home device to 
-    selectedDevice  =   random(devicesData.list);
-    selectedFamily  =   random(relationsData.relatives);
+    selectedDevice  =   random(data.devices.list);
+    selectedFamily  =   random(data.relations.relatives);
     acronym         =   random(ai.data.names[0].acronyms);
     selectedName    =   ai.data.names[0].meanings[(ai.data.names[0].acronyms.indexOf(acronym))];
 
     //  Debug:
     console.log(
-        `Setup:\t____[Completed]`,
-        `\n\t> SmartDevice:\t` + selectedDevice,
-        `\n\t> Fam.Member:\t` + selectedFamily,
-        `\n\t> AI_Name:\t` + selectedName,
-        `\n\t> AI_Acronym:\t` + acronym
+        `<_Setup:\t[Completed]\t_>`,
+        `\n\t> SmartDevice:\t`  +   `{` + selectedDevice + `}`,
+        `\n\t> Fam_Member:\t`   +   `{` + selectedFamily + `}`,
+        `\n\t> AI_Name:\t\t`    +   `[\b` + selectedName + `\b]`,
+        `\n\t> AI_Acronym: \t`  +   `[` + acronym + `]`,
     )
+
+    aiFace  =   new FacialReconstruction();
+    aiFace.setup();
 
     //  Setting up the Interactions loop:
     aiOutput();
+
+    console.log(
+        `<_Program Started\t_>`
+    );
 }
-/** On Every Frame: */
+
+
+//__Draw:   ____________________________________________//
+
+/** Called Every Frame: */
 function draw() {
-    background(0, 20, 0);
+    // switch (this.state) {
+    //     case STATE.START:
+    //         this.loading();
+    //         break;
+    //     case STATE.MIMICKING:
+    //         this.running();
+    //         break;
+    // }
+
+    background(0);
+
+    aiFace.draw();
 
     //  Text displayed on the screen:
     backlog();
@@ -171,15 +221,28 @@ function draw() {
     timerCount();
 }
 
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
-//__Elements On Display:________________________________//
+function loading()  {
 
+}
 
-/** Displaying backlog: */
+function bios() {
+    
+}
+
+function running()  {
+
+}
+
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+/** Displaying Text:    */
+    /** Displaying the backlog: */
 function backlog()  {
-    
+    //  Selecting font for text:
     textFont(`JetBrains Mono`);
-    
+
     push();
     fill(0, 200, 0);
     textSize(26);
@@ -188,7 +251,7 @@ function backlog()  {
     text(interactions, 10, windowHeight - 50,  windowHeight);
     pop();
 }
-/** Displaying input line:  */
+    /** Displaying the input line:  */
 function inputLine()    {
     //  Blinking of the input bar:
     blinkIntensity  =   blinkIntensity* -1;
@@ -199,46 +262,35 @@ function inputLine()    {
     textSize(32);
     textWrap(WORD);
     textAlign(LEFT, BOTTOM);
-    text(`  > ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
+    text(`\t> ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
     pop();
 }
 
 
-//__AI Functions:_______________________________________//
+//__AI: ________________________________________________//
 
-
-//  Question from AI's previous dialogue:
-let previousQuestion    =   `Nan`;
-let negIndex    =   `Nan`;
-let posIndex    =   `Nan`;
-let outputType  =   `Neutral`;
-
-/** Question progression:   */
+/** AI: */
 function aiOutput() {
     recognition.stop();
 
     //  Random language:
-    let selectedLanguage    =   random(langData.list);
+    let selectedLanguage    =   random(data.language.list);
 
     //  Output elements:
-    let newQuestion =   undefined;
-    let beforeQuestion  =   undefined;
+    let newQuestion         =   undefined;
+    let beforeQuestion      =   undefined;
+    let previousQ_Index     =   undefined;
+    let newQ_Index          =   undefined;
+    // let angerIndex          =   undefined;
 
 
-    //  Start: 
+    //  Start:
     if (ai.data.posInput === 0 && ai.data.negInput === 0)   {
-        currentOutput   =   ai.data.lines[0].start;
-        questionVisual[0]   =   unaskedQuery;
+        // let previousQ_Index =   undefined;
 
-        console.log(
-            `AI:        {` + acronym + `}`,
-            `\nCurrentLanguage: `, selectedLanguage,
-            `\nPositive Values: `, `[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]`,
-            `\nNegative Output: `, `[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]`,
-            `\nMood:            `, outputType,
-            `\nBefore Question: `, `"` + currentOutput + `"`,
-            questionVisual
-        );
+        previousQuestion    =   ai.data.lines[0].start;
+        currentOutput       =   ai.data.lines[0].start;
+        questionVisual[0]   =   unaskedQuery;
     }
 
     //  Interactions:
@@ -248,7 +300,7 @@ function aiOutput() {
         let negative    =   ai.data.negInput > ai.data.negOutput;
 
         //  Anger voice lines:
-        if (negative)  {
+        if (negative)   {
             //  Logging type of output:
             outputType  =   `Negative`;
             //  Triggering the AI's anger lines if the user refuses to answer:
@@ -274,16 +326,18 @@ function aiOutput() {
             if (ai.data.posInput === ai.data.lines[0].comment.length)   {
                 badEnd();
             }
+
             //  AI gathering info:
             else    {
-                //  Selecting the comment:
-                let previousQueryIndex  =   ai.data.lines[0].question.indexOf(newQuestion) + 1;
-                console.log(`<><>`, previousQueryIndex);
-                beforeQuestion =   cSelect(previousQuestion, ai.data.posInput - 1);
-                // beforeQuestion =   cSelect(previousQuestion, ai.data.lines[0].question.indexOf(newQuestion)-1);
                 //  Selecting question:
                 newQuestion =   qSelect(ai.data.posInput);
-                posIndex   =   ai.data.lines[0].comment.indexOf(ai.data.posInput);
+                
+                //  Selecting the comment:
+                previousQ_Index =   ai.data.lines[0].question.indexOf(previousQuestion) + 1;
+                console.log(`C_Index =\t` + previousQ_Index);
+                beforeQuestion =   cSelect(previousQ_Index);
+
+                // console.log(posIndex);
 
                 //  Assembling the voice line:
                 currentOutput   =   `\n` + beforeQuestion + `\n` + newQuestion;
@@ -291,24 +345,22 @@ function aiOutput() {
                 previousQuestion    =   newQuestion;
             }
         }
-
-
-
-
-        //  If both are triggered:
-        // else if (positive && negative)  {
-        // }
-
-        console.log(
-            `AI:        {` + acronym + `}`,
-            `\nCurrentLanguage: `, selectedLanguage,
-            `\nPositive Values: `, `[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]    {`, posIndex, `}`,
-            `\nNegative Output: `, `[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]    {`, negIndex, `}`,
-            `\nMood:            `, outputType,
-            `\nBefore Question: `, `"`, beforeQuestion, `"`,
-            `\n }   End AI`
-        );
     }
+
+    newQ_Index  =   ai.data.lines[0].question.indexOf(newQuestion);
+
+    console.log(
+        `AI:        {` + acronym + `}`,
+        `\nCurrentLanguage: `, selectedLanguage,
+        `\n\t\t\t\t\t| Inp | Out |\t|Index|`,
+        `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]\t{`, posIndex, `}`,
+        `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]\t{`, negIndex, `}`,
+        `\nMood:\t\t\t\t`   ,  outputType,
+        `\nComment:\t\t`    ,   previousQ_Index,
+        `\n"`               +   beforeQuestion  +   `"`,
+        `\nQuestion:\t\t`   ,  newQ_Index,
+        `\n"`               +   newQuestion     +   `"`
+    );
 
 
     //  Voice settings:
@@ -324,78 +376,72 @@ function aiOutput() {
     interactions.push(currentOutput);
 }
 
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 /** Selecting Question: */
 function qSelect(userData)  {
-    let question    =   undefined;
-    let questionIndex   =   userData - 1;
-    let reRolls =   `X`;
-    let r   =   undefined;
+    let question    =   undefined;      //Question selected
+    let questionIndex   =   undefined;  //Array of ai.data.lines[0].question
+    let reRolls =   `X`;                //Amount of times question was randomized
+    let r   =   false;                  //If question is random
 
+    // console.log(userData);
 
     if (userData > 1 && userData <= 4)  {
-        r   =   `Y`;
+        r   =   true;
         reRolls =   0;
 
         //  Randomizing the order of questions:     [1, 2, 3]
         questionIndex   =   random(choices);
-        question    =   ai.data.lines[0].question[questionIndex];
 
-        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex] === `[A]`) {
+        while ((questionIndex > 0 && questionIndex < 4) && questionVisual[questionIndex + 1] === answeredQuery) {
             questionIndex   =   random(choices);
             reRolls++;
-            question    =   ai.data.lines[0].question[questionIndex];
-        }
-        questionVisual[questionIndex + 1]    =   askedQuery;
 
+            // console.log(
+            //     questionVisual,
+            //     `\nIndex:   `, questionIndex
+            // );
+        }
+        question    =   ai.data.lines[0].question[questionIndex];
+
+        questionVisual[questionIndex + 1]    =   askedQuery;
     }
+
     else    {
+        questionIndex   =   userData - 1;
         if (userData === 1 || userData > 4) {
-            r   =   `N`;
             question    =   ai.data.lines[0].question[questionIndex];
             questionVisual[questionIndex + 1]    =    askedQuery;
         }
+
         else    {
             question    =   `Err`;
         }
     }
 
-    //  Debug:
-    console.log(
-        `**User:________________(Debug)**`
-        `  [Question Selection:___________________`,
-        `\nRandom Index:        [`, r, `]   {`, questionIndex, `}`,
-        `\nIndex Re-rolls:  _____`, reRolls,
-        questionVisual,
-        `\nQuery:   "`, question, `"`,
-    );
-
     return question;
 }
+
 /** Selecting comment:  */
-function cSelect(query, queryPos)   {
-    console.log(
-        `   >   Comment Selection:____________________`,
-        `\n     >   `, 
-    );
-    //  Previous Question + it's position in ai.data.lines[0].comment:
-    console.log(query, queryPos);
-    let selection   =   ai.data.lines[0].comment[queryPos];
+function cSelect(index) {
+
+    let selection   =   ai.data.lines[0].comment[index];
     //  Final value:
     let c   =   linesEdit(selection, `{1}`, `{2}`, `{3}`)
     return c;
 }
-/** Adding interactive elements to conversation:    */
+
+/** Adding Data in dialogue strings:    */
 function linesEdit(string, name, label, family) {
-    console.log(string);
+    // console.log(string);
     //  Creates an array out of all the words in the comment:
     if (string) {
         let word    =   string.split(` `);
 
         console.log(
-            `\nPlaceholders: `+ name, label, family,
-            `\nValues: `, user.name, acronym, selectedFamily,
+            `Dialogue Personalization____:`,
+            `\n Placeholders: `+ name, label, family,
+            `\n Values: `, user.name, acronym, selectedFamily,
             word
         );
 
@@ -415,15 +461,14 @@ function linesEdit(string, name, label, family) {
         }
         //  Assembling the "word" array into 1 string:
         let result  =   word.join(` `);
-        console.log(result);
+        // console.log(result);
 
         return result;
     }
 }
 
 
-//__User Functions:_____________________________________//
-
+//__User:   ____________________________________________//
 
 /** Speech Recognition: */
 function userInput()    {
@@ -433,9 +478,8 @@ function userInput()    {
     recognition.onResult    =   handleSpeechInput;
     
     recognition.start();
-    // userRecognition();
 
-    console.log(`User:`, currentInput);
+    console.log(`User:  "` + currentInput + `"`);
 }
 
 /** Processing the User's speech:   */
@@ -461,7 +505,7 @@ function callingCommands(input, sentence)   {
         if (match && match.length > 1)  {
             console.log(match);
 
-            // command.callback(match);
+            command.callback(match);
         }
     }
 
@@ -469,7 +513,7 @@ function callingCommands(input, sentence)   {
     if (recognition.resultValue)    {
         //  Convert it to lowercase and add it to the Log:
         currentInput    =   recognition.resultString.toLowerCase();
-        console.log(currentInput);
+        // console.log(currentInput);
     }
     else    {
         return;
@@ -478,8 +522,9 @@ function callingCommands(input, sentence)   {
 
 /** Submitting Vocal Input: */
 function submitAns(data)    {
+    // console.log(`Input received`);
     let reply   =   data[1];
-    console.log(`User Input: ` + reply);
+    // console.log(`User Input: ` + reply);
 
     //  Analyzing sentence for other data:
     callingCommands(commands, data[1]);
@@ -502,20 +547,32 @@ function submitAns(data)    {
 
     //  Debugging:  Log current progress:
     console.log(
-        `User:`
-        `Positive: `, ai.data.posInput, ai.data.posOutput,
-        `\nNegative: `, ai.data.negInput, ai.data.negOutput,
-        // `\nQ_Remaining: ` + ai.data.lines[0].question,
-        `\nInfo gathered: `, questionVisual, user
+        `User:\t\t{` + user.name + `}`,
+        `\n\t\t\t\t\t| Inp | Out |`,
+        `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]`,
+        `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]`,
+        `\nInfo gathered: ` ,   questionVisual, user
     );
+
+    // console.log(
+    //     `AI:\t\t{` + acronym + `}`,
+    //     `\nCurrentLanguage: `, selectedLanguage,
+    //     `\n\t\t\t\t\t| Inp | Out |\t|Index|`,
+    //     `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]\t{`, posIndex, `}`,
+    //     `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]\t{`, negIndex, `}`,
+    //     `\nMood:\t\t\t\t`, outputType,
+    //     `\nComment:\t\t`, previousQ_Index,
+    //     `\n"` + beforeQuestion + `"`,
+    //     `\nQuestion:\t\t`, newQ_Index,
+    //     `\n"` + newQuestion + `"`
+    // );
 
     //  Starting the output program:
     aiOutput();
 }
 
 
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
-
+//__Data Collection:____________________________________//
 
 /** Collecting User's personal Data:    */
     /** Name:   */
@@ -555,8 +612,8 @@ function getNationality(data)   {
     //  Checking if the user's Nationality was already given:
     if (!user.nationality)  {
         //  Adding the user's nationality if it appears in the list of countries:
-        for (let i = 0; i < countryData.list.length; i++)   {
-            if (data[1] === countryData.list[i].toLowerCase())  {
+        for (let i = 0; i < data.country.list.length; i++)   {
+            if (data[1] === data.country.list[i].toLowerCase())  {
                 let country =   grammar_Capital(data[1]).join(` `);
 
                 //  Adds the nationality to the user info:
@@ -585,7 +642,7 @@ function getSocialStatus(data)  {
     }
 }
     /** Current Address:    */
-function getResidency(data)  {
+function getResidency(data) {
     console.log(data[1]);
 
     if (!user.address)  {
@@ -596,6 +653,7 @@ function getResidency(data)  {
     }
 }
 
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
 /** Making Proper Nouns:    */
 function grammar_Capital(toCap) {
@@ -611,68 +669,71 @@ function grammar_Capital(toCap) {
 
         beenCap.push(capitalWords);
     }
-    console.log(beenCap);
+    // console.log(beenCap);
 
     return beenCap;
 }
 
 
-//__Ending Functions:___________________________________//
-
+//__Endings:    ________________________________//
 
 /** Endings:    */
 function badEnd()   {
     console.log(`You lose!`);
 }
+
 function goodEnd()  {
     console.log(`You Win!`);
 }
 
 
+//__Debugging:  ________________________________________//
 
-//__Debugging:__________________________________________//
-
-
-/** Debugging:  */
+/** Interactions:   */
 function keyPressed()   {
-    //  null response:  [spacebar]
+    //  Null response:      [Spacebar]
     if (event.keyCode === 32)   {
         console.log(`input received: _`);
+        
+        aiOutput();
     }
-    //  positive response:  [+ key]
-    else if (event.keyCode === 187)  {
+    //  Positive response:  [ "+" Key]
+    else if (event.keyCode === 187) {
         let reply   =   undefined;
         
-        if (previousQuestion === ai.data.lines[0].start)   {
+        if (previousQuestion === ai.data.lines[0].start)    {
             questionVisual[0]   =   answeredQuery;
+            reply               =   "Hi";
         }
-        else if (previousQuestion === ai.data.lines[0].question[0])    {
-            user.name   =   "Peter Jacobs";
-            reply   =   user.name;
+        else if (previousQuestion === ai.data.lines[0].question[0]) {
+            user.name           =   "Peter Jacobs";
+            reply               =   user.name;
             questionVisual[1]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[1])    {
-            user.age   =   `35`;
-            reply   =   user.age;
+        else if (previousQuestion === ai.data.lines[0].question[1]) {
+            user.age            =   `35`;
+            reply               =   user.age;
             questionVisual[2]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[2])    {
+        else if (previousQuestion === ai.data.lines[0].question[2]) {
             user.nationality    =   `Canada`;
-            reply   =   user.nationality;
+            reply               =   user.nationality;
             questionVisual[3]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[3])    {
+        else if (previousQuestion === ai.data.lines[0].question[3]) {
             user.relationship   =   `"N"`;
-            reply   =   user.relationship;
+            reply               =   user.relationship;
             questionVisual[4]   =   answeredQuery;
         }
-        else if (previousQuestion === ai.data.lines[0].question[4])    {
-            user.address    =   `2364 NY-5, Utica, USA`;
-            reply   =   user.address;
+        else if (previousQuestion === ai.data.lines[0].question[4]) {
+            user.address        =   `23640 NY-5, Utica, USA`;
+            reply               =   user.address;
             questionVisual[5]   =   answeredQuery;
         }
         
-        currentInput    =   `\n>    ` + reply;
+        currentInput    =   `\n>\tA:\t` + reply;
+        interactions.push(currentInput);
+
         ai.data.posInput++;
         console.log(
             `**User:________________(Debug)**\n`,
@@ -680,46 +741,79 @@ function keyPressed()   {
             questionVisual, `\n`,
             user
         );
+        
+        aiOutput();
     }
-    //  negative response:  [- key]
-    else if (event.keyCode === 189)  {
+    //  Negative response:  [ "-" Key]
+    else if (event.keyCode === 189) {
         ai.data.negInput++;
-        console.log(`input received: -`);
+
+        currentInput    =   `\n>\tA:\t` + `Negative`;
+        interactions.push(currentInput);
+        console.log(interactions);
+
+        
+        aiOutput();
     }
-
-    aiOutput();
 }
 
-/** Debugging voice input:  */
-function userRecognition()  {
-    recognition.onError =   console.log(
-        `{____________** RecordingErr **:____________}`,
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
-    );
-    
-    recognition.onEnd   =   function()  {
-        console.log(
-            `Voice Settings:`,
-            `\n - Continuous:`, recognition.continuous, 
-            recognition.interimResults,
-            recognition.onResult,
-            recognition.resultConfidence,
-        );
-    };
-}
-
-
+//  Timer Values:
 let timer   =   {
-    active: false,
+    active:         false,
     startMillis:    undefined,
-    start:  undefined,
-    duration:   undefined,
-    endMillis:  undefined,
-    end:    undefined,
-    counting:   undefined,
+    start:          undefined,
+    duration:       undefined,
+    endMillis:      undefined,
+    end:            undefined,
+    counting:       undefined,
 };
 
-function resetTimer()    {
+/** Debugging:  Timer:  */
+function mouseClicked() {
+    //  Stopping timer:
+    if (timer.active)   {
+        //  Converting timer results into a clock format:
+        timer.endMillis     =   millis();
+        timer.end           =   clock(timer.endMillis);
+        timer.duration      =   clock(timer.endMillis - timer.startMillis);
+
+        
+        console.log(`*Stopping Timer\n*`, timer);
+
+        //  Switch off:
+        resetTime();
+    }
+    //  Starting timer:
+    else    {
+        //  Switch on:
+        timer.active        =   true;
+        //  Converting start value into clock format:
+        timer.startMillis   =   millis();
+        timer.start         =   clock(timer.startMillis);
+
+        console.log(`*StartingTimer:*\n`, timer)
+    }
+}
+/** Starts the timer:   */
+function timerCount()   {
+    if (timer.active)   {
+        timer.counting  =   clock(millis());
+    }
+}
+/** Displaying the timer results in digital clock format:   */
+function clock(state)   {
+    let mil =   state;
+    let sec =   floor(mil/1000);
+    let min =   floor(sec/60);
+
+    let result  =   floor((min%60)/10) + (min%60)%10 + `:` + floor((sec%60)/10) + (sec%60)%10 + `:` + floor((mil%1000)/100) + floor((mil%100)/10);
+
+    return result;
+}
+/** Resets the timer to it's original values:   */
+function resetTime()    {
     timer.active        =   false;
     timer.startMillis   =   undefined;
     timer.start         =   undefined;
@@ -727,47 +821,3 @@ function resetTimer()    {
     timer.counting      =   undefined;
     timer.end           =   undefined;
 }
-
-function mouseClicked() {
-    timer.active    =   !timer.active;
-    //  If the timer is active:
-    if (timer.active)   {
-        // timer.active    =   false;
-
-        //  Converting timer data into a clock format:
-        timer.endMillis =   millis();
-        timer.end =   clock(timer.endMillis);
-
-        timer.duration    =   clock(timer.endMillis - timer.startMillis);
-
-        console.log(`*Stopping Timer\n*`, timer);
-    }
-
-    //  If the timer is inactive:
-    else    {
-        resetTimer();
-        // timer.active    =   true;
-
-        timer.startMillis   =   millis();
-        timer.start   =   clock(timer.startMillis);
-
-        console.log(`*StartingTimer:*\n`, timer)
-    } 
-}
-
-function timerCount()    {
-    if (timer.active)   {
-        timer.counting  =   clock(millis());
-    }
-}
-
-function clock(state)    {
-    let mil   =   state;
-    let sec   =   floor(mil/1000);
-    let min   =   floor(sec/60);
-
-    let result  =   floor((min%60)/10) + (min%60)%10 + `:` + floor((sec%60)/10) + (sec%60)%10 + `:` + floor((mil%1000)/100) + floor((mil%100)/10);
-
-    return result;
-}
-

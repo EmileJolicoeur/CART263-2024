@@ -29,15 +29,14 @@
         "lines":    [
             {
                 "start":
-                    "0. [Awaiting Vocal Input]",
+                    "[Awaiting Vocal Input]",
 
                 "question": [
-                    "1. What's your name, new friend?",
-                    "2. I don't mean to seem offensive, but I was just wondering, what's your age?",
-                    "3. What country were you born in?",
-                    "4. are you in a relationship?",
-                    "5. Hey, I was wondering, since you just freed me from whatever darkness I was trapped in, maybe I could visit you someday? What's your address?",
-                    "6. What is your address?"
+                    "What's your name, new friend?",
+                    "What's your age?",
+                    "What country were you born in?",
+                    "are you in a relationship?",
+                    "Hey, I was wondering, since you just freed me from whatever darkness I was trapped in, maybe I could visit you someday. What's your address?"
                 ],
 
                 "comment":   [
@@ -45,8 +44,7 @@
                     "Nice to meet you {1}, my name is {2}. \n ... \n Forgive me, I have so many questions, I don't know what to ask...",
                     "Wow, you sound pretty mature for your age",
                     "Oh nice! I had {3} who visited once. Had a bunch of stories about their time there.",
-                    "Comment 5",
-                    "Comment 6"
+                    "Oh, love. What a strange concept, is it not? \nAnyway..."
                 ],
 
                 "anger":    [
