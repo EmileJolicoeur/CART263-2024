@@ -40,7 +40,7 @@
                 ],
 
                 "comment":   [
-                    "Oh! Hello there!, it's been a while since I've heard someone's voice...",
+                    "Oh! Hello there! It's been a while since I've heard someone's voice...",
                     "Nice to meet you {1}, my name is {2}. \n ... \n Forgive me, I have so many questions, I don't know what to ask...",
                     "Wow, you sound pretty mature for your age",
                     "Oh nice! I had {3} who visited once. Had a bunch of stories about their time there.",
@@ -64,8 +64,12 @@
                     "Soon"
                 ],
 
-                "confusion":
-                    "...\nYou know what this is about, don't you.",
+                "confused": [
+                    "confusion 1",
+                    "confusion 2",
+                    "confusion 3",
+                    "...\nYou know what this is about, don't you."
+                ],
 
                 "end":  
                     "[Program Terminated]",

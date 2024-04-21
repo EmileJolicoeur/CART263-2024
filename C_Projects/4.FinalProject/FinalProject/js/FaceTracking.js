@@ -31,8 +31,12 @@ class   FacialReconstruction    {
         //  -   -   -   -   -   -   -   -   -   -   -   -   //
 
     modelLoaded()   {
-        this.state  =   STATE.MIMICKING;
+        // this.state  =   STATE.MIMICKING;
+        state  =   STATE.MIMICKING;
         this.face.on(`face`, this.handleFaceDetection.bind(this));
+        
+        //  Setting up the Interactions loop:
+        aiOutput();
     }
     
             //  -   -   -   -   -   -   -   -   -   -   -   //
@@ -47,17 +51,17 @@ class   FacialReconstruction    {
     //__Draw:   ____________________________________________//
 
     //  Called Every Frame:
-    draw()  {
-        //  Switching States between loading & mimicking
-        switch (this.state) {
-            case STATE.START:
-                this.loading();
-                break;
-            case STATE.MIMICKING:
-                this.running();
-                break;
-        }
-    }
+    // draw()  {
+    //     //  Switching States between loading & mimicking
+    //     switch (this.state) {
+    //         case STATE.START:
+    //             this.loading();
+    //             break;
+    //         case STATE.MIMICKING:
+    //             this.running();
+    //             break;
+    //     }
+    // }
 
     //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
 
@@ -68,6 +72,7 @@ class   FacialReconstruction    {
 
     //  Once mesh is ready:
     running()   {
+        console.log(`Face Tracking`);
         let flippedVid  =   ml5.flipImage(this.vid);
 
         if (this.camera)    {

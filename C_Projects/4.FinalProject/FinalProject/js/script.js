@@ -94,11 +94,12 @@ const submitComm    =   [
 /*  JSON:   */
 //  [Setup] Data files:
 let data    =   {
-    country:    undefined,
     devices:    undefined,
     language:   undefined,
     relations:  undefined,
 };
+//  [Data Collection]   Country List:
+let countryData     =   undefined;
 //  [AI]    AI's parameters:
 let ai              =   undefined;
 
@@ -147,7 +148,7 @@ let aiFace;
 /** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    data.country    =   loadJSON(`assets/data/nationalities_List.json`);
+    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
     data.devices    =   loadJSON(`assets/data/devices_List.json`);
     data.language   =   loadJSON(`assets/data/languages_List.json`);
     data.relations  =   loadJSON(`assets/data/family_List.json`);
@@ -184,11 +185,9 @@ function setup()    {
         `\n\t> AI_Acronym: \t`  +   `[` + acronym + `]`,
     )
 
-    aiFace  =   new FacialReconstruction();
+    aiFace          =   new FacialReconstruction();
     aiFace.setup();
 
-    //  Setting up the Interactions loop:
-    aiOutput();
 
     console.log(
         `<_Program Started\t_>`
@@ -612,8 +611,8 @@ function getNationality(data)   {
     //  Checking if the user's Nationality was already given:
     if (!user.nationality)  {
         //  Adding the user's nationality if it appears in the list of countries:
-        for (let i = 0; i < data.country.list.length; i++)   {
-            if (data[1] === data.country.list[i].toLowerCase())  {
+        for (let i = 0; i < countryData.countries.length; i++)   {
+            if (data[1] === countryData.countries[i].toLowerCase())  {
                 let country =   grammar_Capital(data[1]).join(` `);
 
                 //  Adds the nationality to the user info:
