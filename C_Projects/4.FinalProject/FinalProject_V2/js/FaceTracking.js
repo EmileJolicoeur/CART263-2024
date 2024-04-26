@@ -10,12 +10,9 @@ class   Face_AI    {
 
     //__Variables:  ________________________________________//
 
-    constructor()   {
+    constructor(color)  {
         this.vid            =   null;
         this.results        =   [];
-
-        // this.state          =   STATE.START;
-        // this.substate       =   SUBSTATE.ASK;
 
         this.camera         =   false;
         this.modelSeen      =   `mesh`;
@@ -27,7 +24,7 @@ class   Face_AI    {
 
         this.face           =   null;
 
-        // this.tracking   =   false;
+        this.color  =   color;
     }
 
 
@@ -57,7 +54,7 @@ class   Face_AI    {
         this.face.on(`face`, this.handleFaceDetection.bind(this));
         
         //  Setting up the Interactions loop:
-        // aiOutput();
+        // dialogue.outputOfAI();
     }
     
             //  -   -   -   -   -   -   -   -   -   -   -   //
@@ -71,49 +68,29 @@ class   Face_AI    {
 
     //__Draw:   ____________________________________________//
 
-    //  Called Every Frame:
-    draw()  {
-        //  Switching States between loading & mimicking
-        switch (this.state) {
-            case STATE.START:
-                this.loading();
-                break;
-            case STATE.MIMICKING:
-                this.running();
-                break;
-        }
-    }
-
-    //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
-
-    //  While loading facial ancors:
-    loading()   {
-        bios();
-    }
-
-    //  Once mesh is ready:
+    /** Once mesh is ready: */
     running()   {
-        background(0);
-
-        // console.log(`Face Tracking`);
-        // flippedVid  =   ml5.flipImage(this.vid);
-
-        // //  Displaying camera:
-        // if (this.camera)    {
-        //     image(flippedVid, 0, 0, width, height);
-        //     image(this.vid, 0, 0, width, height);
-        // }
+        // background(0);
 
         //  Displaying face:
         for (let i = 0; i < this.results.length; i++)   {
             const vertex = this.results[i].scaledMesh;
-            this.displayMesh(vertex);
+            
+            
+            if (dialogueAI.ai.data.posInput > 1)    {
+                this.foreheadMesh(vertex);
+            }
 
-            for (let j = 0; j < vertex.length; j+= 1)   {
-                const [x, y]    =   vertex[j];
-                this.vertexX =   x*this.webcamRatio.x;
-                this.vertexY =   y*this.webcamRatio.y;
-                this.displayDots(this.vertexX, this.vertexY, j, vertex);
+            // this.displayMesh(vertex);
+
+            if (dialogueAI.ai.data.posInput === 5)  {
+                for (let k = 0; k < vertex.length; k += 1)  {
+                    const [x, y]    =   vertex[k];
+                    this.vertexX =   x*this.webcamRatio.x;
+                    this.vertexY =   y*this.webcamRatio.y;
+                    this.displayDots(this.vertexX, this.vertexY, k, vertex);
+                }
+
             }
         }
     }

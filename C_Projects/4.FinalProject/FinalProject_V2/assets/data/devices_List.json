@@ -1,0 +1,9 @@
+{
+    "descr":    "List of Smart Home Devices:",
+
+    "smartHomes":   [
+        "Alexa!",
+        "Hey Google!",
+        "Hey Siri!"
+    ]
+}

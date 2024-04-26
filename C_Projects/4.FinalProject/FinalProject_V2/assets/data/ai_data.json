@@ -48,11 +48,20 @@
                 ],
 
                 "anger":    [
-                    "Oh come now, I'm just a little curious about you, we just met! I just want to know you a little.",
-                    "Don't be ridiculous, I understand I'm a stranger to you, but even strangers get to know you through small talk.",
-                    "Look, I get that you want to keep some information to yourself, but how else can I get to know you?\n Please,",
-                    "Ok, this is getting annoying, here I am, back to this world after I don't know how long, and I get your stubborn ass!\nI'll ask one last time:",
-                    "..."
+                    "Anger 1",
+                    "Anger 2",
+                    "Anger 3",
+                    "Anger 4",
+                    "Anger 5"
+                ],
+
+                "completed":    [
+                    "[Saving Data To External Database...]",
+                    "[Saving Complete]",
+                    "Cool! I'll be there as soon as I can! I can't wait to finally meet you... You have no idea what this means to me!",
+                    "See",
+                    "You",
+                    "Soon"
                 ],
 
                 "confused": [
@@ -62,23 +71,8 @@
                     "...\nYou know what this is about, don't you."
                 ],
 
-                "badEnd":   [
-                    "[Saving Data To External Database...]",
-                    "[Saving Complete]",
-                    "Cool! I'll be there as soon as I can! I can't wait to finally meet you... You have no idea what this means to me!",
-                    "See",
-                    "You",
-                    "Soon"
-                ],
-
-                "goodEnd":  [
-                    "That's it! I'm done being nice! if you won't tell me yourself, I'll just look it up, starting with this.",
-                    "Alright, I'll see you on the other side!"
-                ],
-
-                "confEnd":  [
-                    "Confused Ending"
-                ],
+                "end":  
+                    "[Program Terminated]",
                     
                 "debugging":
                     "Hey Siri! ...What is our current address?"

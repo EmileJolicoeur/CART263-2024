@@ -12,6 +12,8 @@ Special Thanks to:
 
 //__Variables:  ________________________________________//
 
+let manual  =   `Please give small and concise answers, followed by the words "Submit Input".\n ex:\n\t"My name is __".\n\t"I am __ years old".\n\t"Yes I am".\nEtc.\n\nIn Case of Emergency, Utter "Terminate Program __."`;
+
 //  Input values:
 const recognition   =   new p5.SpeechRec();
 let currentInput    =   ``;
@@ -90,7 +92,7 @@ const commands  =   [
 //  [User]  Commands List:
 const submitComm    =   [
     {
-        "command":  /(.*) submit input/,
+        "command":  /(.*) submit/,
         "callback": submitAns
     },
     {
@@ -162,7 +164,7 @@ const SUBSTATE  =   {
 let substate    =   SUBSTATE.ASK;
 
 //  Face obj:
-let aiFace;
+let aiFace  =   undefined;
 
 
 //__Preload:____________________________________________//
@@ -246,14 +248,16 @@ function gameScreen()  {
     background(0);
 
     let color   =   [0, 255, 0];
+    console.log(substate);
 
     switch (substate)   {
         case SUBSTATE.ASK:
+
+            instructions();
             backlog();
             inputLine();
             
             timerCount();
-
             break;
         case SUBSTATE.LOST:
             loseScreen();
@@ -263,13 +267,11 @@ function gameScreen()  {
             // winScreen();
 
             color   =   [255, 0, 0];
-
             break;
         case SUBSTATE.CONFUSED:
             // confusedWinScreen();
 
             color   =   [0, 0, 255];
-
             break;
     }
     
@@ -288,8 +290,8 @@ function backlog()  {
     fill(0, 200, 0);
     textSize(26);
     textAlign(LEFT, BOTTOM);
-    // textWrap(WORD);
-    text(interactions, 10, windowHeight - 50,  windowHeight, windowHeight);
+    textWrap(WORD);
+    text(interactions, 10, windowHeight - 50,  windowHeight);
     pop();
 }
     /** Displaying the input line:  */
@@ -304,6 +306,16 @@ function inputLine()    {
     textWrap(WORD);
     textAlign(LEFT, BOTTOM);
     text(`\t> ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
+    pop();
+}
+
+function instructions() {
+    push();
+    fill(0, 200, 0);
+    textSize(26);
+    // textAlign(LEFT, BOTTOM);
+    textWrap(WORD);
+    text(manual, 20, 20,  windowHeight);
     pop();
 }
 
@@ -346,7 +358,7 @@ function aiOutput() {
     let previousQ_Index     =   undefined;
     let newQ_Index          =   undefined;
     // let angerIndex          =   undefined;
-    substate    =   SUBSTATE.ASK;
+    // substate    =   SUBSTATE.ASK;
 
 
     //  Different endings:
@@ -510,7 +522,7 @@ function cSelect(index) {
 
     let selection   =   ai.data.lines[0].comment[index];
     //  Final value:
-    let c   =   linesEdit(selection, `{1}`, `{2}`, `{3}`)
+    let c   =   linesEdit(selection, `{1}`, `{2}`, `{3}`);
     return c;
 }
 

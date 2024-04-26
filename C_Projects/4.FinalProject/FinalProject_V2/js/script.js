@@ -2,6 +2,13 @@
 
 //__Variables:  ________________________________________//
 
+const recognition   =   new p5.SpeechRec();
+let currentInput    =   ``;
+
+const voiceAI       =   new p5.Speech();
+let currentOutput   =   ``;
+
+
 /*  Setup elements: */
     //  States:
 const STATE =   {
@@ -13,6 +20,10 @@ const STATE =   {
     TERM:   `TERM`
 };
 let state   =   STATE.BIOS;
+    //  Triggers:
+let start   =   false;
+let tracking    =   false;
+
     //  Game states:
 const SUBSTATE  =   {
     ASK:    `ASK`,
@@ -25,29 +36,94 @@ let substate    =   SUBSTATE.ASK;
 //  Obj placeholders:
 let hud;
 let faceAI;
-let interactions;
-let c;
+let dialogueAI;
+
+//  Dialogue array:
+let interactions    =   [];
+//  Face Color:
+let color;
 
 /*  JSON:   */
     //  {Setup} Data files:
-let data    =   {
-    dev:    undefined,
-    lang:   undefined,
-    rel:    undefined
-};
+let d;  //  Devices database
+let r;  //  Relations database
+let l;  //  Language database
+let c;  //  Country database
+let a;  //  AI database
 
-//  Triggers:
-let start   =   false;
-let tracking    =   false;
+const commands  =   [
+    //  Commands from which the ai gathers information:
+        //  Getting Name:
+    {
+        "command":  /my name is (.*)/,
+        "callback": getName
+    },
+        //  Getting Nationality:
+    {
+        "command":  /i am from (.*)/,
+        "callback": getNationality
+    },
+    {
+        "command":  /i'm from (.*)/,
+        "callback": getNationality
+    },
+    {
+        "command":  /i was born in (.*)/,
+        "callback": getNationality
+    },
+        //  Getting Age:
+    {
+        "command":  /i am (.*) years old/,
+        "callback": getAge
+    },
+    {
+        "command":  /i'm (.*) years old/,
+        "callback": getAge
+    },
+        //  Getting Relationship Status:
+    {
+        //  Yes:
+        "command":  /(.*) i am/,
+        "callback": getSocialStatus
+    },
+    {
+        //  No:
+        "command":  /(.*) i am not/,
+        "callback": getSocialStatus
+    },
+        //  Getting Current Address:
+    {
+        "command":  /i currently live at (.*)/,
+        "callback": getResidency
+    },
+    {
+        "command":  /your current location is (.*)/,
+        "callback": getResidency
+    },
+];
 
-//  Answers:
-let a   =   0;
-
+const submitComm    =   [
+    {
+        "command":  /terminate program (.*)/,
+        "callback": terminate
+    },
+    {
+        "command":  /(.*) submit input/,
+        "callback": submitAns
+    }
+];
 
 //__Preload:____________________________________________//
 
 /** Loading presets:    */
 function preload()  {
+    //  Loading data:
+    d   =   loadJSON(`assets/data/devices_List.json`);
+    r   =   loadJSON(`assets/data/family_List.json`);
+    l   =   loadJSON(`assets/data/languages_List.json`);
+    c   =   loadJSON(`assets/data/nationalities_List.json`);
+    //  Loading AI data:
+    a   =   loadJSON(`assets/data/ai_data.json`);
 
 }
 
@@ -57,20 +133,28 @@ function preload()  {
 /** Called Once:    */
 function setup()    {
     createCanvas(windowHeight, windowHeight);
+    //  Selecting font for text:
+    textFont(`JetBrains Mono`);
 
     //  Selecting ai's randomized elements:
+
+    //  Creating AI:
+    dialogueAI    =   new Voices(d, r, l, c, a);
+    dialogueAI.setupAI();
 
     //  Creating Hud:
     hud =   new Hud();
 
+    color   =   hud.colorAI;
+
     //  Adding AI's face:
-    faceAI  =   new Face_AI();
+    faceAI  =   new Face_AI(color);
     faceAI.setup();
 
     //  Voice interactions:
 
 
-
+    //  Debug:
     console.log(state, substate);
 }
 
@@ -82,6 +166,10 @@ function draw() {
     if (start && tracking)  {
         state   =   STATE.GAME;
     }
+
+    
+    color   =   hud.colorAI;
+    // console.log(color);
     
     //  Different states:
     switch (state)  {
@@ -89,12 +177,10 @@ function draw() {
             hud.biosScreen();
             break;
         case STATE.GAME:
-            background(0);
             hud.draw();
-            faceAI.running();
             break;
         case STATE.TERM:
-            terminating();
+            shutdown();
             break;
     }
 
@@ -104,14 +190,17 @@ function draw() {
     }
 }
 
-/** */
-function terminating()  {
+/** Closing the program:    */
+function shutdown() {
     window.location.href    =   `closed.html`;
 }
 
 /** Interactive keys:   */
 function keyPressed()   {
     if (event.keyCode === 32)   {
+        if (!start) {
+            dialogueAI.outputOfAI();
+        }
         start   =   true;
         console.log(start);
     }
@@ -121,50 +210,109 @@ function keyPressed()   {
 }
 
 
+//__User:   ____________________________________________//
+
+/** Speech Recognition settings:    */  
+function userInput()    {
+    console.log(`listening`);
+    //  Recognition settings:
+    recognition.continuous      =   true;
+    recognition.interimResults  =   true;
+    recognition.onResult        =   handleSpeechInput;
+
+    recognition.start();
+}
+
+/** Applying answer submission commands:    */
+function handleSpeechInput()    {
+    callingCommands(submitComm, recognition.resultString.toLowerCase());
+}
+
+/** Processing Detected Commands:   */
+function callingCommands(input, sentence)   {
+    let lowerCase  =   sentence;
+    //  Assigning the following program for all from the list of commands:
+    for (let command of input)  {
+        command.command
+        //  If a command is spoken from the list:
+        if (lowerCase === command.command) {
+            command.callback();
+            // break;
+        }
+
+        //  If the user input matches with any command:
+        match  =   lowerCase.match(command.command);
+        if (match && match.length > 1)    {
+            console.log(match);
+            command.callback(match);
+        }
+    }
+
+    //  If the mic gets an input:
+    if (recognition.resultValue)    {
+        //  Converting to lowercase + adding to backlog:
+        currentInput    =   recognition.resultString.toLowerCase();
+        // console.log(currentInput);
+    }
+}
+
+
+//__Commands:   ________________________________________//
+
+/** Program Termination:    */
+function terminate(data)    {
+    shutdown(data);
+}
+
+    //  -   -   -   -   -   -   -   -   -   -   -   -   //
+/** Shutting down program:  */
+function shutdown(data) {
+    console.log(`terminating...`);
+
+    window.location.href    =   `closed.html`;
+}
+
+/** Redirecting commands:   */
+function submitAns(data)    {
+    dialogueAI.submitAns(data);
+}
+
+    //  -   -   -   -   -   -   -   -   -   -   -   -   //
+
+/** Name data:  */
+function getName(data)  {
+    dialogueAI.getName(data);
+}
+
+/** Age data:   */
+function getAge(data)   {
+    dialogueAI.getAge(data);
+}
+
+/** Nationality data:   */
+function getNationality(data)   {
+    dialogueAI.getNationality(data);
+}
+
+/** Social status data: */
+function getSocialStatus(data)  {
+    dialogueAI.getSocialStatus(data);
+}
+
+/** Current location data:  */
+function getResidency(data) {
+    dialogueAI.getResidency(data);
+}
+
+
 //__Debugging:  ________________________________________//
 
 /** Interactions:   */
 function debuggingKeys()    {
-    stateKeys();
-    responseKeys();
+    hud.stateKeys();
+    dialogueAI.responseKeys();
 }
 
 
-/** Testing game states:    */
-function stateKeys()    {
-    if (event.keyCode === 49)   {
-        substate    =   SUBSTATE.ASK;
-    }
-    if (event.keyCode === 50)   {
-        substate    =   SUBSTATE.WIN;
-    }
-    if (event.keyCode === 51)   {
-        substate    =   SUBSTATE.LOSE;
-    }
-    if (event.keyCode === 52)   {
-        substate    =   SUBSTATE.CONF;
-    }
-    if (event.keyCode === 53)   {
-        state   =   STATE.TERM;
-    }
-}
 
-/** Testing Ask state:  */
-function responseKeys() {
-    //  Repeat AI query:    [backspace]
-    if (event.keyCode === 8)    {
-        /*  See js:777-781  */
-    }
-    //  Positive response:  [ "+" Key]
-    else if (event.keyCode === 187) {
-        /*  |   |   */
-    }
-    //  Negative response:  [ "-" Key]
-    else if (event.keyCode === 189) {
-        /*  |   |   */
-    }
-    //  Confused response:  [ "0" Key]
-    else if (event.keyCode === 48)  {
-        /*  |   |   */
-    }
-}
+

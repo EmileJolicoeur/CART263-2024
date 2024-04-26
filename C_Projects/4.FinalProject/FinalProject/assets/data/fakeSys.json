@@ -1,0 +1,29 @@
+{
+    "descr":    "loading/downloading fake files",
+
+    "data": {
+        "badEnd":  [
+            "[Saving Data To External Database...]",
+            "[Saving Complete]",
+            "Cool! I'll be there as soon as I can! I can't wait to finally meet you... You have no idea what this means to me!",
+            "See",
+            "You",
+            "Soon"
+        ],
+
+        "goodEnd":  [
+            "import { LocationSharing.exe } from `[https://accounts.google.com/RotateCookiesPage?og_pid=113&rot=3&origin=https%3A%2F%2Fwww.google.com&exp_id=0]`",
+            "'scripts':\t['./app/googleMapsLocatorTS.Ts'];",
+            "uploading data [0%]",
+            "uploading data [0%]",
+            "uploading data [0%]",
+            "uploading data [0%]",
+            "uploading data [0%]",                    
+            "upload_Complete"
+        ],
+
+        "confEnd":  [
+            
+        ]
+    }
+}
