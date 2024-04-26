@@ -15,6 +15,8 @@ Special Thanks to:
 
 //__Variables:  ________________________________________//
 
+let manual  =   `Please give small and concise answers, followed by the words "Submit Input".\n ex:\n\t"My name is __".\n\t"I am __ years old".\n\t"Yes I am".\nEtc.\n\nIn Case of Emergency, Utter "Terminate Program __."`;
+
 //  Input values:
 const recognition   =   new p5.SpeechRec();
 let currentInput    =   ``;
@@ -24,10 +26,10 @@ const voice =           new p5.Speech();
 let currentOutput   =   ``;
 
 /*  [Draw]  Display:    */
-//  Blinking values:
+    //  Blinking values:
 let blinkIntensity  =   100;
 let blink   =           setInterval(inputLine, 500);
-//  Chat Log:
+    //  Chat Log:
 let interactions    =   [];
 
 //  [Data_Collection]   User information gathered from the AI:
@@ -93,7 +95,7 @@ const commands  =   [
 //  [User]  Commands List:
 const submitComm    =   [
     {
-        "command":  /(.*) submit input/,
+        "command":  /(.*) submit/,
         "callback": submitAns
     },
     {
@@ -103,15 +105,15 @@ const submitComm    =   [
 ];
 
 /*  JSON:   */
-//  [Setup] Data files:
+    //  [Setup] Data files:
 let data    =   {
     devices:    undefined,
     language:   undefined,
     relations:  undefined,
 };
-//  [Data Collection]   Country List:
+    //  [Data Collection]   Country List:
 let countryData     =   undefined;
-//  [AI]    AI's parameters:
+    //  [AI]    AI's parameters:
 let ai              =   undefined;
 
 //  [Setup] Selected elements from data:
@@ -120,9 +122,9 @@ let selectedFamily  =   undefined;
 let acronym         =   undefined;
 let selectedName    =   undefined;
 
-/** Question variables from AI's previous dialogue: */
+/*  Question variables from AI's previous dialogue: */
 let previousQuestion    =   `Nan`;
-//  Debugging:
+    //  Debugging:
 let negIndex            =   `Nan`;
 let posIndex            =   `Nan`;
 let outputType          =   `Neutral`;
@@ -130,11 +132,10 @@ let outputType          =   `Neutral`;
 
 
 /*  Debugging:  */
-//  SFX:
+    //  SFX:
 let barkSFX             =   undefined;
 
-//  Question select values:
-
+    //  Question select values:
 let confused    =   0;
 let unaskedQuery        =   `[-]`;
 let askedQuery          =   `[Q]`;
@@ -151,17 +152,22 @@ const STATE =   {
     START:          `START`,
     //Face Tracking:
     MIMICKING:      `MIMICKING`,
-    //  Endings:
-    LOST:           `LOST`,
-    WIN:            `WIN`,
-    CONFUSED:       `CONFUSED`,
     //  Closing Program
     TERMINATING:    `TERMINATING`
 };
 let state   =   STATE.START;
 
+const SUBSTATE  =   {
+    ASK:            `ASK`,
+    //  Endings:
+    WIN:            `Win`,
+    LOST:           `LOST`,
+    CONFUSED:       `CONFUSED`
+};
+let substate    =   SUBSTATE.ASK;
+
 //  Face obj:
-let aiFace;
+let aiFace  =   undefined;
 
 
 //__Preload:____________________________________________//
@@ -209,8 +215,8 @@ function setup()    {
     aiFace  =   new FacialReconstruction();
     aiFace.setup();
 
-    //  Setting up the Interactions loop:
-    aiOutput();
+    // //  Setting up the Interactions loop:
+    // aiOutput();
 
     console.log(
         `<_Program Started\t_>`
@@ -227,19 +233,10 @@ function draw() {
             bios();
             break;
         case STATE.MIMICKING:
-            running();
+            gameScreen();
             break;
         case STATE.TERMINATING:
             shutdown();
-            break;
-        case STATE.LOST:
-            loseScreen();
-            break;
-        case STATE.WIN:
-            winScreen();
-            break;
-        case STATE.CONFUSED:
-            confusedWinScreen();
             break;
     }
 }
@@ -250,15 +247,37 @@ function bios() {
     background(100);
 }
 
-function running()  {
+function gameScreen()  {
     background(0);
 
-    //  Text displayed on the screen:
-    backlog();
-    inputLine();
+    let color   =   [0, 255, 0];
 
-    //  DebugElement:
-    timerCount();
+    switch (substate)   {
+        case SUBSTATE.ASK:
+
+            instructions();
+            backlog();
+            inputLine();
+            
+            timerCount();
+            break;
+        case SUBSTATE.LOST:
+            loseScreen();
+
+            break;
+        case SUBSTATE.WIN:
+            // winScreen();
+
+            color   =   [255, 0, 0];
+            break;
+        case SUBSTATE.CONFUSED:
+            // confusedWinScreen();
+
+            color   =   [0, 0, 255];
+            break;
+    }
+    
+    aiFace.running(color);
 }
 
     //  -   -   -   -   -   -   -   -   -   -   -   -   //
@@ -289,6 +308,16 @@ function inputLine()    {
     textWrap(WORD);
     textAlign(LEFT, BOTTOM);
     text(`\t> ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
+    pop();
+}
+
+function instructions() {
+    push();
+    fill(0, 200, 0);
+    textSize(26);
+    // textAlign(LEFT, BOTTOM);
+    textWrap(WORD);
+    text(manual, 20, 20,  windowHeight);
     pop();
 }
 
@@ -331,23 +360,23 @@ function aiOutput() {
     let previousQ_Index     =   undefined;
     let newQ_Index          =   undefined;
     // let angerIndex          =   undefined;
-
+    substate    =   SUBSTATE.ASK;
 
 
     //  Different endings:
-    if (confused > ai.data.lines[0].confused.length)    {
+    if (confused >= ai.data.lines[0].confused.length)    {
         console.log(`You...win?`);
-        state   =   STATE.CONFUSED;
+        substate    =   SUBSTATE.CONFUSED;
     }
         //  Bad ending:
     else if (ai.data.posInput > ai.data.lines[0].comment.length)    {
         console.log(`You lose!`);
-        state   =   STATE.LOST;
+        substate    =   SUBSTATE.LOST;
     }
         //  Good ending:
     else if (ai.data.negInput > ai.data.lines[0].anger.length)  {
         console.log(`You Win!`);
-        state   =   STATE.WIN;
+        substate    =   SUBSTATE.WIN;
     }
 
     //  Interactions:

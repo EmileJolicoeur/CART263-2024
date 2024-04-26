@@ -1,10 +1,21 @@
-class   FacialReconstruction    {
+/** Script holding:
+ * 
+ * Facial tracking
+ * Camera rescaling
+ * Mesh display
+ * 
+*/
+
+class   Face_AI    {
+
+    //__Variables:  ________________________________________//
+
     constructor()   {
         this.vid            =   null;
         this.results        =   [];
 
-        this.state          =   STATE.START;
-        this.substate       =   SUBSTATE.ASK;
+        // this.state          =   STATE.START;
+        // this.substate       =   SUBSTATE.ASK;
 
         this.camera         =   false;
         this.modelSeen      =   `mesh`;
@@ -15,6 +26,8 @@ class   FacialReconstruction    {
         };
 
         this.face           =   null;
+
+        // this.tracking   =   false;
     }
 
 
@@ -36,12 +49,15 @@ class   FacialReconstruction    {
         //  -   -   -   -   -   -   -   -   -   -   -   -   //
 
     modelLoaded()   {
-        // this.state  =   STATE.MIMICKING;
-        state  =   STATE.MIMICKING;
+        // state  =   STATE.MIMICK;
+        tracking   =   true;       //  To switch states:
+        console.log(tracking);
+
+
         this.face.on(`face`, this.handleFaceDetection.bind(this));
         
         //  Setting up the Interactions loop:
-        aiOutput();
+        // aiOutput();
     }
     
             //  -   -   -   -   -   -   -   -   -   -   -   //
@@ -55,23 +71,49 @@ class   FacialReconstruction    {
 
     //__Draw:   ____________________________________________//
 
-    //  Once mesh is ready:
+    //  Called Every Frame:
+    draw()  {
+        //  Switching States between loading & mimicking
+        switch (this.state) {
+            case STATE.START:
+                this.loading();
+                break;
+            case STATE.MIMICKING:
+                this.running();
+                break;
+        }
+    }
 
-    running(color)   {
-        // background(0);
+    //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+    //  While loading facial ancors:
+    loading()   {
+        bios();
+    }
+
+    //  Once mesh is ready:
+    running()   {
+        background(0);
 
         // console.log(`Face Tracking`);
+        // flippedVid  =   ml5.flipImage(this.vid);
+
+        // //  Displaying camera:
+        // if (this.camera)    {
+        //     image(flippedVid, 0, 0, width, height);
+        //     image(this.vid, 0, 0, width, height);
+        // }
 
         //  Displaying face:
         for (let i = 0; i < this.results.length; i++)   {
             const vertex = this.results[i].scaledMesh;
-            this.displayMesh(vertex, color);
+            this.displayMesh(vertex);
 
             for (let j = 0; j < vertex.length; j+= 1)   {
                 const [x, y]    =   vertex[j];
                 this.vertexX =   x*this.webcamRatio.x;
                 this.vertexY =   y*this.webcamRatio.y;
-                this.displayDots(this.vertexX, this.vertexY, color);
+                this.displayDots(this.vertexX, this.vertexY, j, vertex);
             }
         }
     }
@@ -80,17 +122,15 @@ class   FacialReconstruction    {
 
 
     //  Debugging (dots):
-    displayDots(x, y, color)   {
-        push();
-        fill(color);
+    displayDots(x, y)   {
+        fill(0, 255, 0);
         ellipse(x, y, 3, 3);
-        pop();
     }
 
     //  Displaying Mesh:
-    displayMesh(vertex, color)    {
+    displayMesh(vertex)    {
         push();
-        stroke(color);
+        stroke(0, 255, 0);
         strokeWeight(1);
     
         this.foreheadMesh(vertex);

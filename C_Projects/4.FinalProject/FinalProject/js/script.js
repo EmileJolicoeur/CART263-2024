@@ -1,6 +1,3 @@
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
-//______________________________________________________//
-
 /**
 "Spilled Information"
 by Emile Jolicoeur
@@ -24,10 +21,10 @@ const voice =           new p5.Speech();
 let currentOutput   =   ``;
 
 /*  [Draw]  Display:    */
-//  Blinking values:
+    //  Blinking values:
 let blinkIntensity  =   100;
 let blink   =           setInterval(inputLine, 500);
-//  Chat Log:
+    //  Chat Log:
 let interactions    =   [];
 
 //  [Data_Collection]   User information gathered from the AI:
@@ -42,6 +39,12 @@ let user    =   {
 //  [submitAns] User voice triggers:
 const commands  =   [
     //  Commands from which the ai gathers information:
+        //  Getting Name:
+    {
+        "command":  /my name is (.*)/,
+        "callback": getName
+    },
+        //  Getting Nationality:
     {
         "command":  /i am from (.*)/,
         "callback": getNationality
@@ -51,6 +54,11 @@ const commands  =   [
         "callback": getNationality
     },
     {
+        "command":  /i was born in (.*)/,
+        "callback": getNationality
+    },
+        //  Getting Age:
+    {
         "command":  /i am (.*) years old/,
         "callback": getAge
     },
@@ -58,22 +66,18 @@ const commands  =   [
         "command":  /i'm (.*) years old/,
         "callback": getAge
     },
+        //  Getting Relationship Status:
     {
-        "command":  /my name is (.*)/,
-        "callback": getName
-    },
-    {
-        "command":  /i am (.*)/,
-        "callback": getName
-    },
-    {
+        //  Yes:
         "command":  /(.*) i am/,
         "callback": getSocialStatus
     },
     {
+        //  No:
         "command":  /(.*) i am not/,
         "callback": getSocialStatus
     },
+        //  Getting Current Address:
     {
         "command":  /i currently live at (.*)/,
         "callback": getResidency
@@ -88,19 +92,23 @@ const submitComm    =   [
     {
         "command":  /(.*) submit input/,
         "callback": submitAns
+    },
+    {
+        "command":  /terminate program (.*)/,
+        "callback": terminate
     }
 ];
 
 /*  JSON:   */
-//  [Setup] Data files:
+    //  [Setup] Data files:
 let data    =   {
     devices:    undefined,
     language:   undefined,
     relations:  undefined,
 };
-//  [Data Collection]   Country List:
+    //  [Data Collection]   Country List:
 let countryData     =   undefined;
-//  [AI]    AI's parameters:
+    //  [AI]    AI's parameters:
 let ai              =   undefined;
 
 //  [Setup] Selected elements from data:
@@ -109,21 +117,21 @@ let selectedFamily  =   undefined;
 let acronym         =   undefined;
 let selectedName    =   undefined;
 
-/** Question variables from AI's previous dialogue: */
+/*  Question variables from AI's previous dialogue: */
 let previousQuestion    =   `Nan`;
-//  Debugging:
+    //  Debugging:
 let negIndex            =   `Nan`;
 let posIndex            =   `Nan`;
 let outputType          =   `Neutral`;
 
 
 
-
 /*  Debugging:  */
-//  SFX:
+    //  SFX:
 let barkSFX             =   undefined;
 
-//  Question select values:
+    //  Question select values:
+let confused    =   0;
 let unaskedQuery        =   `[-]`;
 let askedQuery          =   `[Q]`;
 let answeredQuery       =   `[R]`;
@@ -135,9 +143,23 @@ let questionVisual      =   [`[_]`, `[_]`, `[_]`, `[_]`, `[_]`, `[_]`];
 /*  Face Tracking:  */
 //  [Draw]  States:
 const STATE =   {
-    START:  `START`,
-    MIMICKING:  `MIMICKING`
+    //  Start:
+    START:          `START`,
+    //Face Tracking:
+    MIMICKING:      `MIMICKING`,
+    //  Closing Program
+    TERMINATING:    `TERMINATING`
 };
+let state   =   STATE.START;
+
+const SUBSTATE  =   {
+    ASK:            `ASK`,
+    //  Endings:
+    WIN:            `Win`,
+    LOST:           `LOST`,
+    CONFUSED:       `CONFUSED`
+};
+let substate    =   SUBSTATE.ASK;
 
 //  Face obj:
 let aiFace;
@@ -148,7 +170,7 @@ let aiFace;
 /** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
+    countryData    =   loadJSON(`assets/data/nationalities_List.json`);
     data.devices    =   loadJSON(`assets/data/devices_List.json`);
     data.language   =   loadJSON(`assets/data/languages_List.json`);
     data.relations  =   loadJSON(`assets/data/family_List.json`);
@@ -185,9 +207,11 @@ function setup()    {
         `\n\t> AI_Acronym: \t`  +   `[` + acronym + `]`,
     )
 
-    aiFace          =   new FacialReconstruction();
+    aiFace  =   new FacialReconstruction();
     aiFace.setup();
 
+    // //  Setting up the Interactions loop:
+    // aiOutput();
 
     console.log(
         `<_Program Started\t_>`
@@ -199,42 +223,60 @@ function setup()    {
 
 /** Called Every Frame: */
 function draw() {
-    // switch (this.state) {
-    //     case STATE.START:
-    //         this.loading();
-    //         break;
-    //     case STATE.MIMICKING:
-    //         this.running();
-    //         break;
-    // }
-
-    background(0);
-
-    aiFace.draw();
-
-    //  Text displayed on the screen:
-    backlog();
-    inputLine();
-
-    //  DebugElement:
-    timerCount();
+    switch (state)  {
+        case STATE.START:
+            bios();
+            break;
+        case STATE.MIMICKING:
+            gameScreen();
+            break;
+        case STATE.TERMINATING:
+            shutdown();
+            break;
+    }
 }
 
 //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
-
-function loading()  {
-
-}
 
 function bios() {
+    background(100);
+}
+
+function gameScreen()  {
+    background(0);
+
+    let color   =   [0, 255, 0];
+
+    switch (substate)   {
+        case SUBSTATE.ASK:
+            backlog();
+            inputLine();
+            
+            timerCount();
+
+            break;
+        case SUBSTATE.LOST:
+            loseScreen();
+
+            break;
+        case SUBSTATE.WIN:
+            // winScreen();
+
+            color   =   [255, 0, 0];
+
+            break;
+        case SUBSTATE.CONFUSED:
+            // confusedWinScreen();
+
+            color   =   [0, 0, 255];
+
+            break;
+    }
     
+    aiFace.running(color);
 }
 
-function running()  {
-
-}
-
-//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+    //  -   -   -   -   -   -   -   -   -   -   -   -   //
 
 /** Displaying Text:    */
     /** Displaying the backlog: */
@@ -246,8 +288,8 @@ function backlog()  {
     fill(0, 200, 0);
     textSize(26);
     textAlign(LEFT, BOTTOM);
-    textWrap(WORD);
-    text(interactions, 10, windowHeight - 50,  windowHeight);
+    // textWrap(WORD);
+    text(interactions, 10, windowHeight - 50,  windowHeight, windowHeight);
     pop();
 }
     /** Displaying the input line:  */
@@ -263,6 +305,29 @@ function inputLine()    {
     textAlign(LEFT, BOTTOM);
     text(`\t> ` + currentInput + `_`, 7, windowHeight - 10, windowWidth - 14);
     pop();
+}
+
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+function winScreen()    {
+    background(0, 30, 0);
+}
+
+function loseScreen()   {
+    background(30, 0, 0);
+}
+
+function confusedWinScreen()    {
+    background(0, 0, 30);
+}
+
+//  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+function terminate()    {
+    state   =   STATE.TERMINATING;
+}
+function shutdown() {
+    window.location.href    =   `termination.html`;
 }
 
 
@@ -281,15 +346,23 @@ function aiOutput() {
     let previousQ_Index     =   undefined;
     let newQ_Index          =   undefined;
     // let angerIndex          =   undefined;
+    substate    =   SUBSTATE.ASK;
 
 
-    //  Start:
-    if (ai.data.posInput === 0 && ai.data.negInput === 0)   {
-        // let previousQ_Index =   undefined;
-
-        previousQuestion    =   ai.data.lines[0].start;
-        currentOutput       =   ai.data.lines[0].start;
-        questionVisual[0]   =   unaskedQuery;
+    //  Different endings:
+    if (confused >= ai.data.lines[0].confused.length)    {
+        console.log(`You...win?`);
+        substate    =   SUBSTATE.CONFUSED;
+    }
+        //  Bad ending:
+    else if (ai.data.posInput > ai.data.lines[0].comment.length)    {
+        console.log(`You lose!`);
+        substate    =   SUBSTATE.LOST;
+    }
+        //  Good ending:
+    else if (ai.data.negInput > ai.data.lines[0].anger.length)  {
+        console.log(`You Win!`);
+        substate    =   SUBSTATE.WIN;
     }
 
     //  Interactions:
@@ -297,82 +370,93 @@ function aiOutput() {
         //  Values to verify if it's a positive or negative output:
         let positive    =   ai.data.posInput > ai.data.posOutput;
         let negative    =   ai.data.negInput > ai.data.negOutput;
+        
+        //  Start:
+        if (ai.data.posInput === 0 && ai.data.negInput === 0)   {
+
+            // let previousQ_Index =   undefined;
+
+            previousQuestion    =   ai.data.lines[0].start;
+            currentOutput       =   ai.data.lines[0].start;
+            questionVisual[0]   =   unaskedQuery;
+        }
+
+        //  Confusion voice lines:
+        else if (positive && negative)  {
+            //  Logging type of output:
+            outputType      =   `???`;
+
+            //  Selecting confused comment:
+            confused++;
+            beforeQuestion  =   ai.data.lines[0].confused[(confused - 1)];
+            
+            //  Assembling the dialogue:
+            currentOutput   =   `\n` + beforeQuestion + `\n` + previousQuestion;
+        }
 
         //  Anger voice lines:
-        if (negative)   {
+        else if (negative)  {
             //  Logging type of output:
-            outputType  =   `Negative`;
-            //  Triggering the AI's anger lines if the user refuses to answer:
-            if (ai.data.negInput < ai.data.lines[0].anger.length)   {
-                //  Selecting the angry comment:
-                beforeQuestion  =   ai.data.lines[0].anger[(ai.data.negInput - 1)];
-                negIndex   =   ai.data.lines[0].anger.indexOf(ai.data.negInput - 1);
+            outputType      =   `Negative`;
 
-                //  Assembling the voice line:
-                currentOutput   =   `\n` + beforeQuestion + `\n` + previousQuestion;
-            }
-            //  Pissed off the AI:
-            else    {
-                goodEnd();
-            }
+            //  Selecting the angry comment:
+            beforeQuestion  =   ai.data.lines[0].anger[(ai.data.negInput - 1)];
+            negIndex        =   ai.data.lines[0].anger.indexOf(ai.data.negInput - 1);
+
+            //  Assembling the dialogue:
+            currentOutput   =   `\n` + beforeQuestion + `\n` + previousQuestion;
         }
 
         //  Curious voice lines:
         else if (positive)  {
             //  Logging type of output:
-            outputType  =   `Positive`;
-            //  Satisfied the AI:
-            if (ai.data.posInput === ai.data.lines[0].comment.length)   {
-                badEnd();
-            }
+            outputType      =   `Positive`;
 
-            //  AI gathering info:
-            else    {
-                //  Selecting question:
-                newQuestion =   qSelect(ai.data.posInput);
-                
-                //  Selecting the comment:
-                previousQ_Index =   ai.data.lines[0].question.indexOf(previousQuestion) + 1;
-                console.log(`C_Index =\t` + previousQ_Index);
-                beforeQuestion =   cSelect(previousQ_Index);
+            //  Selecting question:
+            newQuestion =   qSelect(ai.data.posInput);
+            
+            //  Selecting the comment:
+            previousQ_Index =   ai.data.lines[0].question.indexOf(previousQuestion) + 1;
 
-                // console.log(posIndex);
+            // console.log(`C_Index =\t` + previousQ_Index);
+            beforeQuestion  =   cSelect(previousQ_Index);
 
-                //  Assembling the voice line:
-                currentOutput   =   `\n` + beforeQuestion + `\n` + newQuestion;
-                //  Setting the previous question:
-                previousQuestion    =   newQuestion;
-            }
+            //  Assembling the dialogue:
+            currentOutput   =   `\n` + beforeQuestion + `\n` + newQuestion;
+
+            //  Setting the previous question:
+            previousQuestion    =   newQuestion;
         }
+
+        //  Debugging info:
+            //  Question Index:
+        newQ_Index              =   ai.data.lines[0].question.indexOf(newQuestion);
+
+        console.log(
+            `AI:        {` + acronym + `}`,
+            `\nCurrentLanguage: `, selectedLanguage,
+            `\n\t\t\t\t\t| Inp | Out |\t|Index|`,
+            `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]\t{`, posIndex, `}`,
+            `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]\t{`, negIndex, `}`,
+            `\nMood:\t\t\t\t`   ,  outputType,
+            `\nComment:\t\t`    ,   previousQ_Index,
+            `\n"`               +   beforeQuestion  +   `"`,
+            `\nQuestion:\t\t`   ,  newQ_Index,
+            `\n"`               +   newQuestion     +   `"`
+        );
+
+        //  Voice settings:
+        // voice.setVoice(selectedLanguage);
+        voice.onEnd         =   userInput;
+        voice.speak(currentOutput);
+
+        //  Transfers the inputs to the next loop's output:
+        ai.data.posOutput   =   ai.data.posInput;
+        ai.data.negOutput   =   ai.data.negInput;
+
+        //  Displaying interactions:
+        interactions.push(currentOutput);
     }
-
-    newQ_Index  =   ai.data.lines[0].question.indexOf(newQuestion);
-
-    console.log(
-        `AI:        {` + acronym + `}`,
-        `\nCurrentLanguage: `, selectedLanguage,
-        `\n\t\t\t\t\t| Inp | Out |\t|Index|`,
-        `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]\t{`, posIndex, `}`,
-        `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]\t{`, negIndex, `}`,
-        `\nMood:\t\t\t\t`   ,  outputType,
-        `\nComment:\t\t`    ,   previousQ_Index,
-        `\n"`               +   beforeQuestion  +   `"`,
-        `\nQuestion:\t\t`   ,  newQ_Index,
-        `\n"`               +   newQuestion     +   `"`
-    );
-
-
-    //  Voice settings:
-    voice.setVoice(selectedLanguage);
-    voice.onEnd =   userInput;
-    voice.speak(currentOutput);
-
-    //  Transfers the inputs to the next loop's output:
-    ai.data.posOutput   =   ai.data.posInput;
-    ai.data.negOutput   =   ai.data.negInput;
-
-    //  Displaying interactions:
-    interactions.push(currentOutput);
 }
 
 
@@ -535,10 +619,10 @@ function submitAns(data)    {
         ai.data.posInput++;
     }
 
-    // //  After 1st interaction:
-    // if (ai.data.posInput === ai.data.posOutput) {
-    //     ai.data.negInput++;;
-    // }
+    //  After 1st interaction:
+    if (ai.data.posInput === ai.data.posOutput) {
+        ai.data.negInput++;
+    }
 
     //  Text to display on the input line:
     currentInput    =   `\n>    ` + reply;
@@ -552,19 +636,6 @@ function submitAns(data)    {
         `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]`,
         `\nInfo gathered: ` ,   questionVisual, user
     );
-
-    // console.log(
-    //     `AI:\t\t{` + acronym + `}`,
-    //     `\nCurrentLanguage: `, selectedLanguage,
-    //     `\n\t\t\t\t\t| Inp | Out |\t|Index|`,
-    //     `\nPositive Values:`, `\t[ `, ai.data.posInput, ` | `, ai.data.posOutput, ` ]\t{`, posIndex, `}`,
-    //     `\nNegative Output:`, `\t[ `, ai.data.negInput, ` | `, ai.data.negOutput, ` ]\t{`, negIndex, `}`,
-    //     `\nMood:\t\t\t\t`, outputType,
-    //     `\nComment:\t\t`, previousQ_Index,
-    //     `\n"` + beforeQuestion + `"`,
-    //     `\nQuestion:\t\t`, newQ_Index,
-    //     `\n"` + newQuestion + `"`
-    // );
 
     //  Starting the output program:
     aiOutput();
@@ -589,6 +660,11 @@ function getName(data)  {
         questionVisual[1] =   answeredQuery;
         ai.data.posInput++;
     }
+
+    if (previousQuestion != ai.data.lines[0].question[0])   {
+        ai.data.negInput++;
+    }
+    console.log(`name collected`);
 }
 /** Age:    */
 function getAge(data)   {
@@ -604,6 +680,11 @@ function getAge(data)   {
         questionVisual[2] =   answeredQuery;
         ai.data.posInput++;
     }
+
+    if (previousQuestion != ai.data.lines[0].question[1])   {
+        ai.data.negInput++;
+    }
+    console.log(`age collected`);
 }
     /** Nationality:    */  
 function getNationality(data)   {
@@ -623,6 +704,11 @@ function getNationality(data)   {
         questionVisual[3] =   answeredQuery;
         ai.data.posInput++;
     }
+
+    if (previousQuestion != ai.data.lines[0].question[2])   {
+        ai.data.negInput++;
+    }
+    console.log(`nationality collected`);
 }
     /** Relationship:   */
 function getSocialStatus(data)  {
@@ -639,6 +725,11 @@ function getSocialStatus(data)  {
         questionVisual[4] =   answeredQuery;
         ai.data.posInput++;
     }
+
+    if (previousQuestion != ai.data.lines[0].question[3])   {
+        ai.data.negInput++;
+    }
+    console.log(`relationship collected`);
 }
     /** Current Address:    */
 function getResidency(data) {
@@ -650,6 +741,11 @@ function getResidency(data) {
         questionVisual[5] =   answeredQuery;
         ai.data.posInput++;
     }
+
+    if (previousQuestion != ai.data.lines[0].question[4])   {
+        ai.data.negInput++;
+    }
+    console.log(`location collected`);
 }
 
 //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
@@ -671,18 +767,6 @@ function grammar_Capital(toCap) {
     // console.log(beenCap);
 
     return beenCap;
-}
-
-
-//__Endings:    ________________________________//
-
-/** Endings:    */
-function badEnd()   {
-    console.log(`You lose!`);
-}
-
-function goodEnd()  {
-    console.log(`You Win!`);
 }
 
 

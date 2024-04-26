@@ -55,23 +55,49 @@ class   FacialReconstruction    {
 
     //__Draw:   ____________________________________________//
 
+    //  Called Every Frame:
+    draw()  {
+        //  Switching States between loading & mimicking
+        switch (this.state) {
+            case STATE.START:
+                this.loading();
+                break;
+            case STATE.MIMICKING:
+                this.running();
+                break;
+        }
+    }
+
+    //  -   -   -   -   -   -   -   -   -   -   -   -   -   //
+
+    //  While loading facial ancors:
+    loading()   {
+        bios();
+    }
+
     //  Once mesh is ready:
+    running()   {
+        background(0);
 
-    running(color)   {
-        // background(0);
+        console.log(`Face Tracking`);
+        flippedVid  =   ml5.flipImage(this.vid);
 
-        // console.log(`Face Tracking`);
+        //  Displaying camera:
+        if (this.camera)    {
+            image(flippedVid, 0, 0, width, height);
+            image(this.vid, 0, 0, width, height);
+        }
 
         //  Displaying face:
         for (let i = 0; i < this.results.length; i++)   {
             const vertex = this.results[i].scaledMesh;
-            this.displayMesh(vertex, color);
+            this.displayMesh(vertex);
 
             for (let j = 0; j < vertex.length; j+= 1)   {
                 const [x, y]    =   vertex[j];
-                this.vertexX =   x*this.webcamRatio.x;
-                this.vertexY =   y*this.webcamRatio.y;
-                this.displayDots(this.vertexX, this.vertexY, color);
+                vertexX =   x*this.webcamRatio.x;
+                vertexY =   y*this.webcamRatio.y;
+                this.displayDots(vertexX, vertexY, j, vertex);
             }
         }
     }
@@ -80,17 +106,15 @@ class   FacialReconstruction    {
 
 
     //  Debugging (dots):
-    displayDots(x, y, color)   {
-        push();
-        fill(color);
+    displayDots(x, y)   {
+        fill(0, 255, 0);
         ellipse(x, y, 3, 3);
-        pop();
     }
 
     //  Displaying Mesh:
-    displayMesh(vertex, color)    {
+    displayMesh(vertex)    {
         push();
-        stroke(color);
+        stroke(0, 255, 0);
         strokeWeight(1);
     
         this.foreheadMesh(vertex);
