@@ -175,7 +175,7 @@ let aiFace  =   undefined;
 /** Loading presets:    */
 function preload()  {
     //  Loading Data:
-    countryData    =   loadJSON(`assets/data/nationalities_List.json`);
+    countryData     =   loadJSON(`assets/data/nationalities_List.json`);
     data.devices    =   loadJSON(`assets/data/devices_List.json`);
     data.language   =   loadJSON(`assets/data/languages_List.json`);
     data.relations  =   loadJSON(`assets/data/family_List.json`);

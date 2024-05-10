@@ -92,7 +92,7 @@ const commands  =   [
 //  [User]  Commands List:
 const submitComm    =   [
     {
-        "command":  /(.*) submit/,
+        "command":  /(.*) submit input/,
         "callback": submitAns
     },
     {

@@ -76,10 +76,8 @@ class   Face_AI    {
         for (let i = 0; i < this.results.length; i++)   {
             const vertex = this.results[i].scaledMesh;
             
-            
-            if (dialogueAI.ai.data.posInput > 1)    {
-                this.foreheadMesh(vertex);
-            }
+            this.displayMesh(vertex);
+
 
             // this.displayMesh(vertex);
 
@@ -110,11 +108,34 @@ class   Face_AI    {
         stroke(0, 255, 0);
         strokeWeight(1);
     
-        this.foreheadMesh(vertex);
-        this.lowerEyelidMesh(vertex);
-        this.noseMesh(vertex);
-        this.upperJawMesh(vertex);
-        this.jawMesh(vertex);
+            
+        if (dialogueAI.ai.data.posInput >= 1)  {
+            console.log(`test 1`);
+            this.foreheadMesh(vertex);
+        }
+        if (dialogueAI.ai.data.posInput >= 2)  {
+            console.log(`test 2`);
+            this.jawMesh(vertex);
+        }
+        if (dialogueAI.ai.data.posInput >= 3)  {
+            console.log(`test 3`);
+            this.upperJawMesh(vertex);
+        }
+        if (dialogueAI.ai.data.posInput >= 4)  {
+            console.log(`test 4`);
+            this.lowerEyelidMesh(vertex);
+        }
+        if (dialogueAI.ai.data.posInput >= 5)  {
+            console.log(`test 5`);
+            this.noseMesh(vertex);
+        }
+
+
+        // this.foreheadMesh(vertex);
+        // this.lowerEyelidMesh(vertex);
+        // this.noseMesh(vertex);
+        // this.upperJawMesh(vertex);
+        // this.jawMesh(vertex);
     
         pop();
     }

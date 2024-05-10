@@ -186,7 +186,7 @@ function draw() {
 
     //  Debug:  State
     if (keyIsPressed)   {
-        console.log(state, substate);
+        // console.log(state, substate);
     }
 }
 
